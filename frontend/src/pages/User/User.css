@@ -1,0 +1,49 @@
+/* User.css */
+
+/* Table row buttons container */
+.button-container {
+  display: flex;
+  gap: 5px;
+}
+
+/* Individual button wrapper */
+.btnStf {
+  display: inline-block;
+}
+
+/* Update button */
+.updatebtn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.updatebtn:hover {
+  background-color: #0056b3;
+}
+
+/* Delete button */
+.deletebtn {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.deletebtn:hover {
+  background-color: #a71d2a;
+}
+
+/* Optional: adjust button spacing in table cells */
+td .button-container {
+  justify-content: center;
+}

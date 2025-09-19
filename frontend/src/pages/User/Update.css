@@ -1,0 +1,74 @@
+/* Page background and center alignment */
+.container {
+  display: flex;
+  justify-content: center;   /* Horizontal center */
+  align-items: center;       /* Vertical center */
+  min-height: 100vh;         /* Full page height */
+  background-color: #f5f5f5; /* Light gray background */
+}
+
+/* Form box styling */
+.Ufom {
+  background: #ffffff;     /* White background */
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 400px;            /* Fixed width */
+}
+
+/* Heading */
+.Uh2 {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Table rows (remove table look, keep spacing) */
+.ipt {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #444;
+}
+
+/* Label styles */
+.ipt label {
+  margin-right: 10px;
+  font-weight: 600;
+}
+
+/* Input fields */
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.input:focus {
+  border: 1px solid #007bff; /* Highlight on focus */
+}
+
+/* Submit button */
+.btnn {
+  text-align: center;
+}
+
+.btnsub {
+  background: #007bff;
+  color: #fff;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btnsub:hover {
+  background: #0056b3;
+}
