@@ -17,8 +17,7 @@ const DoctorProfile = () => {
     available: true,
   });
 
-  // ✅ Get logged-in doctor ID from localStorage (like admin profile)
-  const doctorId = localStorage.getItem("doctorId");
+  const doctorId = localStorage.getItem("doctorId"); // Logged-in doctor ID
 
   useEffect(() => {
     const fetchDoctor = async () => {
@@ -30,9 +29,7 @@ const DoctorProfile = () => {
         }
 
         const response = await axios.get(`http://localhost:5000/doctors/${doctorId}`);
-        console.log("Fetched doctor data:", response.data);
-
-        const data = response.data; // ✅ your backend returns object directly
+        const data = response.data.doctor; // ✅ Correct: backend returns { doctor }
 
         setDoctor(data);
         setForm({
@@ -67,7 +64,7 @@ const DoctorProfile = () => {
     e.preventDefault();
     try {
       const res = await axios.put(`http://localhost:5000/doctors/${doctorId}`, form);
-      setDoctor(res.data); // ✅ update state with new data
+      setDoctor(res.data.doctor); // ✅ Correct
       setEditing(false);
       alert("Profile updated successfully!");
     } catch (err) {
@@ -100,68 +97,26 @@ const DoctorProfile = () => {
         ) : (
           <form onSubmit={handleUpdate} className="profile-edit-form">
             <label>Name:</label>
-            <input
-              type="text"
-              name="doctorName"
-              value={form.doctorName}
-              onChange={handleChange}
-              required
-            />
+            <input type="text" name="doctorName" value={form.doctorName} onChange={handleChange} required />
 
             <label>Phone:</label>
-            <input
-              type="text"
-              name="doctorPhone"
-              value={form.doctorPhone}
-              onChange={handleChange}
-              required
-            />
+            <input type="text" name="doctorPhone" value={form.doctorPhone} onChange={handleChange} required />
 
             <label>Email:</label>
-            <input
-              type="email"
-              name="doctorEmail"
-              value={form.doctorEmail}
-              onChange={handleChange}
-              required
-            />
+            <input type="email" name="doctorEmail" value={form.doctorEmail} onChange={handleChange} required />
 
             <label>Password:</label>
-            <input
-              type="text"
-              name="doctorPassword"
-              value={form.doctorPassword}
-              onChange={handleChange}
-              required
-            />
+            <input type="text" name="doctorPassword" value={form.doctorPassword} onChange={handleChange} required />
 
             <label>Specialization:</label>
-            <input
-              type="text"
-              name="specialization"
-              value={form.specialization}
-              onChange={handleChange}
-              required
-            />
+            <input type="text" name="specialization" value={form.specialization} onChange={handleChange} required />
 
             <label>Experience (years):</label>
-            <input
-              type="number"
-              name="experienceYears"
-              value={form.experienceYears}
-              onChange={handleChange}
-              required
-              min="0"
-            />
+            <input type="number" name="experienceYears" value={form.experienceYears} onChange={handleChange} required min="0" />
 
             <label>
               Available:
-              <input
-                type="checkbox"
-                name="available"
-                checked={form.available}
-                onChange={handleChange}
-              />
+              <input type="checkbox" name="available" checked={form.available} onChange={handleChange} />
             </label>
 
             <button type="submit">Save Changes</button>
