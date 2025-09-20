@@ -1,0 +1,45 @@
+/* Global App Styles */
+.app-container {
+  min-height: 100vh;
+  transition: all 0.3s ease;
+  margin-left: 280px; /* Space for sidebar */
+}
+
+.page-content {
+  padding: 20px;
+  border-radius: 15px;
+  min-height: calc(100vh - 40px);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* Enhanced animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-content {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .app-container {
+    margin-left: 0; /* Remove sidebar space on mobile */
+  }
+  
+  .page-content {
+    padding: 15px;
+    margin: 10px;
+    margin-top: 80px; /* Space for mobile menu button */
+  }
+}

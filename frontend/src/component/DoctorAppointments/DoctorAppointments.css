@@ -1,0 +1,729 @@
+/* Doctor Appointments Styles with Ayurvedic Theme */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  background: radial-gradient(ellipse at top, #e8f5e9 0%, #c8e6c9 50%, #f1f8e9 100%);
+  min-height: 100vh;
+  color: #1b5e20; /* Dark green text for better Ayurvedic theme */
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 30px;
+  background: linear-gradient(135deg, #2e7d32 0%, #388e3c 50%, #43a047 100%);
+  border-radius: 15px;
+  color: white;
+  box-shadow: 0 10px 30px rgba(46, 125, 50, 0.2);
+}
+
+.header h1 {
+  color: #ffffff;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.header p {
+  color: #e8f5e9;
+  font-size: 1.1rem;
+}
+
+/* Doctor Summary Section */
+.doctor-summary {
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 20px rgba(0, 123, 255, 0.15);
+  border: 1px solid #90CAF9;
+}
+
+.summary-title {
+  color: #0D47A1;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.summary-card {
+  background: linear-gradient(135deg, #ffffff 0%, #E3F2FD 100%);
+  padding: 32px 24px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 40px -15px rgba(0, 123, 255, 0.2);
+  border: 2px solid rgba(144, 202, 249, 0.3);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #2196F3, #1976D2, #42A5F5);
+  border-radius: 20px 20px 0 0;
+}
+
+.summary-card::after {
+  content: '⚕️';
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-size: 1.5rem;
+  opacity: 0.2;
+  transform: rotate(15deg);
+  transition: all 0.4s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 60px -15px rgba(33, 150, 243, 0.3);
+  border-color: #90CAF9;
+}
+
+.summary-card:hover::after {
+  opacity: 0.4;
+  transform: rotate(0deg) scale(1.2);
+}
+
+.card-title {
+  color: #0D47A1;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  z-index: 2;
+}
+
+.card-value {
+  color: #0D47A1;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 900;
+  margin-bottom: 8px;
+  line-height: 1;
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(135deg, #0D47A1, #2196F3);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card-label {
+  color: #1976D2;
+  font-size: 0.95rem;
+  font-weight: 600;
+  position: relative;
+  z-index: 2;
+}
+
+/* Search and Filter Section */
+.search-filter-section {
+  background: #E3F2FD;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
+}
+
+.search-filter-title {
+  color: #0D47A1;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.search-filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.search-input, .filter-select {
+  padding: 12px 15px;
+  border: 1px solid #90CAF9;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  color: #0D47A1;
+  min-width: 200px;
+}
+
+.search-input::placeholder {
+  color: #90CAF9;
+}
+
+.search-button {
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.search-button:hover {
+  background: #1976D2;
+}
+
+/* Appointments Table */
+.appointments-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1);
+}
+
+.appointments-table th {
+  background: #2196F3;
+  color: white;
+  text-align: left;
+  padding: 15px;
+  font-weight: 600;
+}
+
+.appointments-table td {
+  padding: 15px;
+  border-bottom: 1px solid #E3F2FD;
+  color: #333;
+}
+
+.appointments-table tr:hover {
+  background: #F5FCFF;
+}
+
+/* ===== TWO-COLUMN LAYOUT STRUCTURE ===== */
+.patient-details-vertical {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+  padding: 20px 24px;
+  position: relative;
+}
+
+.patient-left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.patient-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+}
+
+.patient-right-column::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(135deg, rgba(144, 202, 249, 0.8), rgba(96, 195, 255, 0.6));
+}
+
+.patient-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(179, 229, 252, 0.8);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.patient-info-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.patient-info-item:hover {
+  padding-left: 6px;
+  background: linear-gradient(90deg, rgba(227, 242, 253, 0.5), transparent);
+  border-radius: 6px;
+  margin: 0 -6px;
+}
+
+/* ===== AYURVEDIC TYPOGRAPHY ===== */
+.info-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #2e7d32; /* Dark green for labels, consistent with Ayurvedic theme */
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 3px;
+  position: relative;
+}
+
+.info-label::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, #4caf50, transparent);
+  border-radius: 1px;
+}
+
+.info-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1b5e20; /* Darker green for values, consistent with Ayurvedic theme */
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+/* ===== CONSULTATION SECTIONS ===== */
+.consultation-section {
+  margin: 16px 0 0;
+  padding: 16px;
+  background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%); /* Light green background */
+  border: 1px dashed rgba(129, 199, 132, 0.4); /* Light green border */
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.consultation-section::before {
+  content: '🌿'; /* Leaf emoji for Ayurvedic theme */
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 1.2rem;
+  opacity: 0.3;
+}
+
+.consultation-link,
+.consultation-pdf,
+.upload-pdf-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+  transition: all 0.3s ease;
+}
+
+.consultation-link:hover,
+.consultation-pdf:hover,
+.upload-pdf-section:hover {
+  padding-left: 6px;
+  background: linear-gradient(90deg, rgba(241, 248, 233, 0.7), transparent);
+  border-radius: 6px;
+  margin: 0 -6px;
+}
+
+.consultation-link p,
+.consultation-pdf p,
+.upload-pdf-section p {
+  margin: 0;
+  font-weight: 700;
+  color: #5d4037; /* Brown color for text */
+  font-size: 1rem;
+}
+
+.physical-appointment-note {
+  margin: 0;
+  font-weight: 700;
+  color: #2e7d32; /* Dark green for notes */
+  font-size: 1rem;
+  font-style: italic;
+}
+
+.upload-info {
+  margin: 0;
+  font-weight: 500;
+  color: #2e7d32; /* Dark green for info text */
+  font-size: 0.85rem;
+}
+
+/* ===== BUTTONS ===== */
+.pdf-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 120px;
+  justify-content: center;
+  box-shadow: 0 2px 12px -4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  transform: translate(-50%, -50%);
+}
+
+button:hover::before {
+  width: 200px;
+  height: 200px;
+}
+
+button:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 16px -6px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.join-btn {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  color: #ffffff;
+}
+
+.download-btn {
+  background: linear-gradient(135deg, #2196f3, #1976d2);
+  color: #ffffff;
+}
+
+.remove-pdf-btn {
+  background: linear-gradient(135deg, #f44336, #d32f2f); /* Red gradient */
+  color: #ffffff;
+}
+
+.upload-summary-btn {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: #ffffff;
+}
+
+.upload-summary-btn:disabled {
+  background: linear-gradient(135deg, #bdbdbd, #9e9e9e);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.modal-header {
+  background: #2196F3;
+  color: white;
+  padding: 20px;
+  border-radius: 15px 15px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+  padding: 25px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #0D47A1;
+  font-weight: 600;
+}
+
+.form-input, .form-textarea, .form-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #90CAF9;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #F5FCFF;
+  color: #0D47A1;
+  box-sizing: border-box;
+}
+
+.form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-file-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px dashed #90CAF9;
+  border-radius: 8px;
+  background: #F5FCFF;
+  color: #0D47A1;
+  box-sizing: border-box;
+}
+
+.submit-button {
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 25px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.3s ease;
+  font-weight: 600;
+}
+
+.submit-button:hover {
+  background: #1976D2;
+}
+
+.submit-button:disabled {
+  background: #90CAF9;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .summary-cards {
+    flex-direction: row;
+    justify-content: flex-start;
+    overflow-x: auto;
+    gap: 12px;
+  }
+  
+  .summary-card {
+    flex: 0 0 auto;
+    min-width: 140px;
+    max-width: 160px;
+  }
+  
+  .search-filter-form {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .search-input, .filter-select, .search-button {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .appointments-table {
+    font-size: 0.9rem;
+  }
+  
+  .appointments-table th,
+  .appointments-table td {
+    padding: 10px 8px;
+  }
+  
+  .modal-content {
+    width: 95%;
+  }
+  
+  /* Responsive for two-column layout */
+  .patient-details-vertical {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px 24px;
+  }
+
+  .patient-right-column::before {
+    display: none;
+  }
+  
+  .consultation-section {
+    margin: 16px 0 0;
+    padding: 16px;
+  }
+  
+  .pdf-actions {
+    flex-direction: column;
+  }
+  
+  button {
+    width: 100%;
+    padding: 16px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .patient-details-vertical {
+    padding: 16px 20px;
+  }
+  
+  .consultation-section {
+    margin: 12px 0 0;
+    padding: 12px;
+    border-radius: 12px;
+  }
+  
+  .summary-card {
+    padding: 14px 10px;
+    border-radius: 16px;
+    min-width: 120px;
+    max-width: 140px;
+  }
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  letter-spacing: 0.025em;
+  border: 2px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.status-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.status-badge:hover::before {
+  left: 100%;
+}
+
+.status-badge.pending {
+  background: linear-gradient(135deg, #ffc107, #ffa000);
+  color: #ffffff;
+  border-color: #ff8f00;
+  box-shadow: 0 4px 15px -3px rgba(255, 193, 7, 0.5);
+}
+
+.status-badge.confirmed {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  color: #ffffff;
+  border-color: #1b5e20;
+  box-shadow: 0 4px 15px -3px rgba(76, 175, 80, 0.5);
+}
+
+.status-badge.completed {
+  background: linear-gradient(135deg, #2196f3, #1976d2);
+  color: #ffffff;
+  border-color: #0d47a1;
+  box-shadow: 0 4px 15px -3px rgba(33, 150, 243, 0.5);
+}
+
+.status-badge.cancelled {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: #ffffff;
+  border-color: #b71c1c;
+  box-shadow: 0 4px 15px -3px rgba(244, 67, 54, 0.5);
+}
+
+.status-badge.booked {
+  background: linear-gradient(135deg, #ffeb3b, #ffc107);
+  color: #333333;
+  border-color: #ffd600;
+  box-shadow: 0 4px 15px -3px rgba(255, 235, 59, 0.5);
+  font-weight: 800;
+}
