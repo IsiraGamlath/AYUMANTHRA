@@ -1,0 +1,724 @@
+ /* Base styles */
+        .ayu-hero {
+          position: relative;
+          height: 70vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          color: white;
+          overflow: hidden;
+        }
+
+        .ayu-hero-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          
+          z-index: 1;
+        }
+
+        .ayu-hero-content {
+          position: relative;
+          z-index: 2;
+          max-width: 800px;
+          padding: 0 20px;
+        }
+
+        .ayu-hero-content h1 {
+          font-size: 3.5rem;
+          font-weight: 700;
+          margin-bottom: 1.5rem;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .ayu-hero-content p {
+          font-size: 1.3rem;
+          margin-bottom: 2.5rem;
+          opacity: 0.95;
+          line-height: 1.6;
+        }
+
+        .ayu-hero-buttons {
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+
+        /* Button Styles */
+        .ayu-btn-primary, .ayu-btn-secondary, .ayu-btn-outline {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 14px 28px;
+          border-radius: 12px;
+          font-weight: 600;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          border: none;
+          text-decoration: none;
+        }
+
+        .ayu-btn-primary {
+          background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+          color: white;
+          box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .ayu-btn-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .ayu-btn-secondary {
+          background: rgba(255, 255, 255, 0.2);
+          color: white;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          backdrop-filter: blur(10px);
+        }
+
+        .ayu-btn-secondary:hover {
+          background: rgba(255, 255, 255, 0.3);
+          border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .ayu-btn-outline {
+          background: transparent;
+          color: #4CAF50;
+          border: 2px solid #4CAF50;
+        }
+
+        .ayu-btn-outline:hover {
+          background: #4CAF50;
+          color: white;
+        }
+
+        .ayu-btn-primary-small {
+          padding: 8px 16px;
+          font-size: 0.9rem;
+          background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .ayu-btn-primary-small:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Modal Styles */
+        .ayu-modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          padding: 20px;
+          backdrop-filter: blur(5px);
+          animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .ayu-modal-content {
+          background: white;
+          border-radius: 20px;
+          max-width: 900px;
+          width: 100%;
+          max-height: 90vh;
+          overflow-y: auto;
+          position: relative;
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+          animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-50px) scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        .ayu-modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 25px 30px;
+          border-bottom: 1px solid #e0e0e0;
+          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+          border-radius: 20px 20px 0 0;
+        }
+
+        .ayu-modal-header h2 {
+          font-size: 1.8rem;
+          font-weight: 700;
+          color: #2e7d32;
+          margin: 0;
+        }
+
+        .ayu-modal-close {
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+          color: #666;
+          padding: 5px;
+          border-radius: 50%;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .ayu-modal-close:hover {
+          background: #f5f5f5;
+          color: #333;
+          transform: rotate(90deg);
+        }
+
+        .ayu-modal-body {
+          padding: 30px;
+        }
+
+        .ayu-modal-dosha-section h3 {
+          font-size: 1.4rem;
+          font-weight: 600;
+          margin-bottom: 20px;
+          color: #2e7d32;
+        }
+
+        .ayu-modal-dosha-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 15px;
+          margin-bottom: 25px;
+        }
+
+        .ayu-modal-dosha-card {
+          padding: 20px;
+          border-radius: 15px;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: 2px solid transparent;
+          background: #f8f9fa;
+        }
+
+        .ayu-modal-dosha-card.active {
+          border-color: #4CAF50;
+          background: #f1f8e9;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(76, 175, 80, 0.2);
+        }
+
+        .ayu-modal-dosha-card h4 {
+          font-size: 1.2rem;
+          font-weight: 600;
+          margin: 10px 0 8px 0;
+          text-transform: capitalize;
+        }
+
+        .ayu-modal-dosha-card p {
+          font-size: 0.9rem;
+          color: #666;
+          line-height: 1.4;
+        }
+
+        .ayu-modal-input, .ayu-modal-select {
+          width: 100%;
+          padding: 15px;
+          border: 2px solid #e0e0e0;
+          border-radius: 12px;
+          font-size: 1rem;
+          margin-bottom: 15px;
+          transition: all 0.3s ease;
+          background: white;
+        }
+
+        .ayu-modal-input:focus, .ayu-modal-select:focus {
+          outline: none;
+          border-color: #4CAF50;
+          box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .ayu-modal-form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
+          margin-bottom: 20px;
+        }
+
+        .ayu-modal-checkbox-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 15px;
+          margin-bottom: 25px;
+        }
+
+        .ayu-modal-checkbox {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 1rem;
+          cursor: pointer;
+          padding: 10px;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+        }
+
+        .ayu-modal-checkbox:hover {
+          background: #f5f5f5;
+        }
+
+        .ayu-modal-recommendations h3 {
+          font-size: 1.4rem;
+          font-weight: 600;
+          margin-bottom: 20px;
+          color: #2e7d32;
+        }
+
+        .ayu-modal-recommendation-cards {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 15px;
+          margin-bottom: 25px;
+        }
+
+        .ayu-modal-recommendation-card {
+          padding: 20px;
+          background: linear-gradient(135deg, #f1f8e9 0%, #e8f5e8 100%);
+          border-radius: 12px;
+          border-left: 4px solid #4CAF50;
+        }
+
+        .ayu-modal-recommendation-card h4 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          margin-bottom: 8px;
+          color: #2e7d32;
+        }
+
+        .ayu-modal-recommendation-card p {
+          font-size: 0.95rem;
+          color: #666;
+          line-height: 1.5;
+        }
+
+        .ayu-modal-footer {
+          padding: 25px 30px;
+          border-top: 1px solid #e0e0e0;
+          background: #fafafa;
+          border-radius: 0 0 20px 20px;
+        }
+
+        .ayu-modal-buttons {
+          display: flex;
+          gap: 15px;
+          justify-content: flex-end;
+          margin-bottom: 20px;
+        }
+
+        .ayu-modal-export-share {
+          display: flex;
+          gap: 15px;
+          justify-content: center;
+        }
+
+        /* Sections */
+        .ayu-dosha-section, .ayu-activities-section, .ayu-features-section, .ayu-calendar-section {
+          padding: 60px 20px;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        .ayu-dosha-section h2, .ayu-activities-section h2, .ayu-features-section h2 {
+          text-align: center;
+          font-size: 2.5rem;
+          font-weight: 700;
+          margin-bottom: 3rem;
+          color: #2e7d32;
+        }
+
+        .ayu-dosha-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 2rem;
+          margin-bottom: 3rem;
+        }
+
+        .ayu-dosha-card {
+          padding: 2rem;
+          border-radius: 20px;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.4s ease;
+          border: 3px solid transparent;
+          background: white;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .ayu-dosha-card.active {
+          transform: translateY(-8px);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .ayu-dosha-card.dosha-vata.active {
+          border-color: #2196F3;
+          background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+
+        .ayu-dosha-card.dosha-pitta.active {
+          border-color: #FF5722;
+          background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+        }
+
+        .ayu-dosha-card.dosha-kapha.active {
+          border-color: #4CAF50;
+          background: linear-gradient(135deg, #f1f8e9 0%, #c8e6c9 100%);
+        }
+
+        .ayu-dosha-icon {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 1rem auto;
+          background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+          color: white;
+          font-size: 2rem;
+          box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .ayu-dosha-card h3 {
+          font-size: 1.8rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+          text-transform: capitalize;
+          color: #2e7d32;
+        }
+
+        .ayu-dosha-card p {
+          font-size: 1rem;
+          color: #666;
+          line-height: 1.6;
+        }
+
+        .ayu-activities-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+          gap: 1.5rem;
+        }
+
+        .ayu-activity-item {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1.5rem;
+          background: white;
+          border-radius: 15px;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+          transition: all 0.3s ease;
+          border-left: 4px solid #e0e0e0;
+        }
+
+        .ayu-activity-item.completed {
+          border-left-color: #4CAF50;
+          background: linear-gradient(135deg, #f1f8e9 0%, #e8f5e8 100%);
+        }
+
+        .ayu-activity-item:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .ayu-activity-icon {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+          color: white;
+          font-size: 1.2rem;
+        }
+
+        .ayu-activity-item.completed .ayu-activity-icon {
+          background: linear-gradient(135deg, #66BB6A 0%, #4CAF50 100%);
+        }
+
+        .ayu-activity-info {
+          flex: 1;
+        }
+
+        .ayu-activity-info p {
+          font-size: 1.1rem;
+          font-weight: 600;
+          margin-bottom: 0.25rem;
+          color: #333;
+        }
+
+        .ayu-activity-info span {
+          font-size: 0.9rem;
+          color: #666;
+        }
+
+        .ayu-activity-type {
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .ayu-activity-type.mindfulness { background: #e8f5e8; color: #2e7d32; }
+        .ayu-activity-type.physical { background: #e3f2fd; color: #1976d2; }
+        .ayu-activity-type.nutrition { background: #fff3e0; color: #f57c00; }
+        .ayu-activity-type.herbs { background: #fce4ec; color: #c2185b; }
+        .ayu-activity-type.lifestyle { background: #f3e5f5; color: #7b1fa2; }
+
+        .ayu-features-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 2rem;
+        }
+
+        .ayu-feature-card {
+          padding: 2rem;
+          background: white;
+          border-radius: 20px;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+          transition: all 0.3s ease;
+          border-top: 4px solid #4CAF50;
+        }
+
+        .ayu-feature-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .ayu-feature-icon {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 1.5rem auto;
+          background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+          color: white;
+          font-size: 1.8rem;
+        }
+
+        .ayu-feature-card h4 {
+          font-size: 1.4rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+          color: #2e7d32;
+        }
+
+        .ayu-feature-card p {
+          font-size: 1rem;
+          color: #666;
+          line-height: 1.6;
+        }
+
+        .ayu-calendar-section {
+          padding: 40px 20px;
+          max-width: 1000px;
+          margin: 0 auto;
+        }
+
+        .ayu-calendar-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 30px;
+          flex-wrap: wrap;
+          gap: 15px;
+        }
+
+        .month-navigation {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+        }
+
+        .month-navigation button {
+          background: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .month-navigation button:hover {
+          background: #45a049;
+          transform: scale(1.1);
+        }
+
+        .month-navigation h3 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #2e7d32;
+          margin: 0;
+        }
+
+        .ayu-calendar-buttons {
+          display: flex;
+          gap: 10px;
+        }
+
+        .ayu-calendar-buttons button {
+          padding: 10px 20px;
+          border: 2px solid #4CAF50;
+          background: transparent;
+          color: #4CAF50;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.3s ease;
+        }
+
+        .ayu-calendar-buttons button:hover {
+          background: #4CAF50;
+          color: white;
+        }
+
+        .ayu-calendar-title {
+          text-align: center;
+          font-size: 2.2rem;
+          font-weight: 700;
+          color: #2e7d32;
+          margin-bottom: 0.5rem;
+        }
+
+        .ayu-calendar-subtitle {
+          text-align: center;
+          font-size: 1.1rem;
+          color: #666;
+          margin-bottom: 2rem;
+        }
+
+        .ayu-calendar-grid {
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          gap: 1px;
+          background: #e0e0e0;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .ayu-calendar-weekday {
+          background: #4CAF50;
+          color: white;
+          padding: 15px 10px;
+          text-align: center;
+          font-weight: 600;
+          font-size: 0.9rem;
+        }
+
+        .ayu-calendar-day {
+          background: white;
+          aspect-ratio: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 8px;
+          font-weight: 600;
+          color: #333;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+        }
+
+        .ayu-calendar-day:hover { background: #f5f5f5; }
+        .ayu-calendar-day.today { background: #e8f5e8; color: #2e7d32; font-weight: 700; }
+        .ayu-calendar-day.inactive { color: #ccc; cursor: default; }
+
+        .ayu-calendar-dots {
+          display: flex;
+          gap: 2px;
+          margin-top: 4px;
+        }
+
+        .ayu-calendar-dots > div {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+        }
+
+        .dot-mindfulness { background: #4CAF50; }
+        .dot-physical { background: #2196F3; }
+        .dot-nutrition { background: #FF9800; }
+        .dot-herbs { background: #E91E63; }
+        .dot-lifestyle { background: #9C27B0; }
+
+        .ayu-floating-btn {
+          position: fixed;
+          bottom: 30px;
+          right: 30px;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+          color: white;
+          border: none;
+          box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+          cursor: pointer;
+          font-size: 1.5rem;
+          transition: all 0.3s ease;
+          z-index: 999;
+        }
+
+        .ayu-floating-btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 12px 30px rgba(76, 175, 80, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+          .ayu-hero-content h1 { font-size: 2.5rem; }
+          .ayu-hero-content p { font-size: 1.1rem; }
+          .ayu-hero-buttons { flex-direction: column; align-items: center; }
+          .ayu-modal-content { margin: 10px; max-height: 95vh; }
+          .ayu-modal-header, .ayu-modal-body, .ayu-modal-footer { padding: 20px; }
+          .ayu-modal-form-grid { grid-template-columns: 1fr; }
+          .ayu-modal-buttons { flex-direction: column; }
+          .ayu-dosha-grid, .ayu-modal-dosha-grid { grid-template-columns: 1fr; }
+          .ayu-activities-grid { grid-template-columns: 1fr; }
+          .ayu-features-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+          .ayu-calendar-header { flex-direction: column; text-align: center; }
+          .ayu-calendar-day { padding: 4px; font-size: 0.9rem; }
+        }
