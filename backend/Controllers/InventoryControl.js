@@ -1,4 +1,4 @@
-const Inventory = require("../Model/InventoryModel");
+const Inventory = require("../model/InventoryModel");
 
 // Controller to get all inventory items
 const getAllInventory = async (req, res, next) => {
@@ -25,6 +25,10 @@ const getAllInventory = async (req, res, next) => {
 const addInventory = async (req, res, next) => {
     const inventoriesData = req.body; // expecting single object
 
+    // Debug: Log received data
+    console.log("Received inventory data:", inventoriesData);
+    console.log("Received file:", req.file);
+
     // If image uploaded, save image path
     if (req.file) {
         inventoriesData.image = `/uploads/${req.file.filename}`;
@@ -34,8 +38,9 @@ const addInventory = async (req, res, next) => {
     try {
         const inventory = new Inventory(inventoriesData);
         savedInventory = await inventory.save(); // save to database
+        console.log("Successfully saved inventory:", savedInventory);
     } catch (err) {
-        console.log(err);
+        console.log("Error saving inventory:", err);
         return res.status(500).json({ message: "Unable to add inventory", error: err.message });
     }
 

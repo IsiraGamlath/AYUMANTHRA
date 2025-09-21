@@ -5,7 +5,7 @@ const router = express.Router();
 const Cart = require("../model/CartModel");
 
 //Insert cart controller
-const CartController = require("../controllers/CartControllers");
+const CartController = require("../Controllers/CartControllers");
 
 router.get("/", CartController.getAllCarts);
 router.post("/", CartController.addCart);

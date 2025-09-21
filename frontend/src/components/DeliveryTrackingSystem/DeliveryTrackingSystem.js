@@ -15,10 +15,8 @@ const makeIcon = (d) => ({ size = 20 }) => (
 const Package = makeIcon("M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16zM3.27 7.96L12 13l8.73-5.04M12 22V13");
 const Truck = makeIcon("M3 7h11v7H3zM14 10h4l3 3v4h-3M5 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm12 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z");
 const CheckCircle = makeIcon("M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4L12 14.01l-3-3");
-const Clock = makeIcon("M12 8v4l3 3M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z");
 const MapPin = makeIcon("M21 10c0 5.25-9 12-9 12S3 15.25 3 10a9 9 0 1 1 18 0zM12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z");
 const Edit = makeIcon("M12 20h9M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z");
-const Save = makeIcon("M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2zM17 21V13H7v8M7 3v5h8");
 const X = makeIcon("M18 6 6 18M6 6l12 12");
 
 const DeliveryTrackingSystem = () => {
@@ -62,7 +60,7 @@ const DeliveryTrackingSystem = () => {
       }
     };
     fetchCarts();
-  }, []);
+  }, [showError]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

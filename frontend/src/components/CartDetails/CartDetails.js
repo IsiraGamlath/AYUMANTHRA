@@ -31,7 +31,7 @@ function CartDetails() {
         showError('Error loading cart data. Please try again.');
       })
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [showError]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -59,7 +59,7 @@ function CartDetails() {
       console.error('Error deleting item:', error);
       showError('Failed to delete item. Please try again.');
     }
-  }, []);
+  }, [showError]);
 
   // Calculate totals - memoized to prevent unnecessary recalculations
   const totals = useMemo(() => {
@@ -155,7 +155,7 @@ function CartDetails() {
       console.error('Error downloading JSON:', error);
       showError('Error downloading JSON file. Please try again.');
     }
-  }, [carts, showWarning, showError, showSuccess]);
+  }, [carts, totals.quantity, showWarning, showError, showSuccess]);
 
   // Download as Excel (CSV with better formatting) - memoized
   const downloadExcel = useCallback(() => {

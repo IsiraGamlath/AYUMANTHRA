@@ -11,7 +11,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
   const navigationItems = [
     { icon: Home, label: 'Dashboard', path: '/', active: location.pathname === '/' },
     { icon: Package, label: 'Inventory', path: '/inventory', active: location.pathname === '/inventory' },
-    { icon: ShoppingCart, label: 'Supplier', path: '/supplier', active: location.pathname === '/supplier' },
+    { icon: ShoppingCart, label: 'Supplier', path: '/home', active: location.pathname === '/home' },
     //{ icon: BarChart3, label: 'Reports', path: '/reports', active: location.pathname === '/reports' },
     { icon: Settings, label: 'Settings', path: '/settings', active: location.pathname === '/settings' }
   ];

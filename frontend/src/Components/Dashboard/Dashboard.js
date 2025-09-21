@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import Sidebar from "../Sidebar/Sidebar";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import "./Dashboard.css";
 import jsPDF from "jspdf";
@@ -41,7 +40,7 @@ const Dashboard = () => {
   });
 
   // Generate notifications based on inventory
-  const generateNotifications = () => {
+  const generateNotifications = useCallback(() => {
     const newNotifications = [];
     const today = new Date();
     
@@ -102,7 +101,7 @@ const Dashboard = () => {
     });
     
     setNotifications(sortedNotifications);
-  };
+  }, [inventory]);
 
   // Fetch all inventory
   const fetchInventory = async () => {
@@ -129,7 +128,7 @@ const Dashboard = () => {
     if (inventory.length > 0) {
       generateNotifications();
     }
-  }, [inventory]);
+  }, [inventory, generateNotifications]);
 
   // Create function for report generation
   const componentRef = useRef();
@@ -326,13 +325,29 @@ const Dashboard = () => {
       // Append all form fields except image
       Object.keys(inputs).forEach((key) => {
         if (key !== "image" && inputs[key] !== "") {
-          formData.append(key, inputs[key]);
+          // Convert date strings to proper format
+          if (key === "expiryDate" || key === "dateAdded") {
+            formData.append(key, new Date(inputs[key]).toISOString());
+          } 
+          // Convert numeric fields to numbers
+          else if (key === "quantity" || key === "price") {
+            formData.append(key, parseFloat(inputs[key]));
+          } 
+          else {
+            formData.append(key, inputs[key]);
+          }
         }
       });
       
       // Append image file if selected
       if (imageFile) {
         formData.append("image", imageFile);
+      }
+
+      // Debug: Log form data
+      console.log("Form data being sent:");
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
       }
 
       let response;
@@ -358,6 +373,8 @@ const Dashboard = () => {
       
     } catch (err) {
       console.error("Error saving inventory:", err);
+      console.error("Error response:", err.response?.data);
+      console.error("Error status:", err.response?.status);
       alert(`Error: ${err.response?.data?.message || err.message}`);
     } finally {
       setLoading(false);
@@ -426,7 +443,6 @@ const Dashboard = () => {
   if (showReportsList) {
     return (
       <div className="dashboard">
-        <Sidebar />
         <div className="dashboard-content">
           <div className="report-page-header">
             <button 
@@ -472,7 +488,6 @@ const Dashboard = () => {
   if (showReport) {
     return (
       <div className="dashboard">
-        <Sidebar />
         <div className="dashboard-content">
           <div className="report-page-header">
             <button 
@@ -504,7 +519,6 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <Sidebar />
       <div className="dashboard-content">
         {!showForm ? (
           <>
