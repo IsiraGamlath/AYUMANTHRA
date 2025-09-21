@@ -20,7 +20,7 @@ function Campaign({ campaign }) {
   // Delete handler
   const deleteHandler = async () => {
     try {
-      await axios.delete(`http://localhost:5016/campaigns/${_id}`);
+      await axios.delete(`http://localhost:5000/campaigns/${_id}`);
       // Redirect back to admin campaigns list
       navigate("/admin/campaigns");
     } catch (error) {
@@ -36,7 +36,7 @@ function Campaign({ campaign }) {
             src={
               imageUrl.startsWith("http")
                 ? imageUrl
-                : `http://localhost:5016${imageUrl}`
+                : `http://localhost:5000${imageUrl}`
             }
             alt={campaignName}
             className="w-full h-48 object-cover rounded-lg"

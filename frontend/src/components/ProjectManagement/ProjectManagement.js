@@ -42,8 +42,8 @@ const ProjectManagement = () => {
       setLoading(true);
       try {
         const [campaignsResponse, offersResponse] = await Promise.all([
-          fetch("http://localhost:5016/campaigns"),
-          fetch("http://localhost:5016/offers")
+          fetch("http://localhost:5000/campaigns"),
+          fetch("http://localhost:5000/offercampaigns")
         ]);
         
         const campaignsData = await campaignsResponse.json();

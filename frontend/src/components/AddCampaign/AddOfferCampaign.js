@@ -193,7 +193,7 @@ function AddOfferCampaign() {
 
   // FIXED: Complete sendRequest function with proper error handling
   const sendRequest = async () => {
-    const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5016";
+    const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
     
     let requestConfig = {};
     let requestData;
@@ -237,13 +237,13 @@ function AddOfferCampaign() {
       };
     }
 
-    console.log("Sending request to:", `${API_BASE_URL}/offers`);
+    console.log("Sending request to:", `${API_BASE_URL}/offercampaigns`);
     console.log("Request data:", requestData);
     console.log("Request config:", requestConfig);
 
     try {
       const res = await axios.post(
-        `${API_BASE_URL}/offers`,
+        `${API_BASE_URL}/offercampaigns`,
         requestData,
         requestConfig
       );

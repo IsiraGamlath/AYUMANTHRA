@@ -27,7 +27,7 @@ function UpdateOfferCampaign() {
   useEffect(() => {
     const fetchHandler = async () => {
       try {
-        const response = await axios.get(`http://localhost:5016/offers/${id}`);
+        const response = await axios.get(`http://localhost:5000/offercampaigns/${id}`);
         const offer = response.data.offer || response.data;
         setInputs({
           productName: offer.productName || '',
@@ -126,7 +126,7 @@ function UpdateOfferCampaign() {
     }
 
     await axios.put(
-      `http://localhost:5016/offers/${id}`,
+      `http://localhost:5000/offercampaigns/${id}`,
       offerData,
       imageFile ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}
     );

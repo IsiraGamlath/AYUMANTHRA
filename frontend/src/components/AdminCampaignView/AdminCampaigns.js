@@ -17,8 +17,8 @@ import {
   TrendingUp
 } from 'lucide-react';
 
-const API_URL = "http://localhost:5016/campaigns";
-const BASE_URL = "http://localhost:5016";
+const API_URL = "http://localhost:5000/campaigns";
+const BASE_URL = "http://localhost:5000";
 
 // Helper function to fetch campaigns
 const fetchHandler = async () => {

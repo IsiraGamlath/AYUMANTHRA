@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const campaignSchema = new mongoose.Schema({
+const offerSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -15,22 +15,23 @@ const campaignSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
-  startDate: {
-    type: Date,
-    required: true
-  },
-  endDate: {
-    type: Date,
-    required: true
-  },
-  targetAudience: {
-    type: String,
+  discountPercentage: {
+    type: Number,
     required: true,
-    trim: true
+    min: 0,
+    max: 100
+  },
+  validFrom: {
+    type: Date,
+    required: true
+  },
+  validUntil: {
+    type: Date,
+    required: true
   },
   status: {
     type: String,
-    enum: ['active', 'inactive', 'completed'],
+    enum: ['active', 'inactive', 'expired'],
     default: 'active'
   },
   createdAt: {
@@ -44,9 +45,9 @@ const campaignSchema = new mongoose.Schema({
 });
 
 // Update the updatedAt field before saving
-campaignSchema.pre('save', function(next) {
+offerSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
   next();
 });
 
-module.exports = mongoose.model("Campaign", campaignSchema);
+module.exports = mongoose.model("Offer", offerSchema);

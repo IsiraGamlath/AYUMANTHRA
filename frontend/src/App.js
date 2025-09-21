@@ -1,6 +1,6 @@
 // App.js
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { Menu } from "lucide-react";
 import Home from "./components/Home/Home";
 import AddCart from "./components/AddCart/AddCart";
@@ -47,8 +47,7 @@ function App() {
 
   return (
     <NotificationProvider>
-      <Router>
-        <div className="app-container">
+      <div className="app-container">
           {/* Sidebar */}
           <Sidebar
             sidebarOpen={sidebarOpen}
@@ -107,7 +106,6 @@ function App() {
             </div>
           </div>
         </div>
-      </Router>
     </NotificationProvider>
   );
 }

@@ -4,15 +4,13 @@ import axios from "axios";
 
 function AddCampaign() {
   const [inputs, setInputs] = useState({
-    campaignName: "",
+    title: "",
     description: "",
     status: "",
-    deadline: "",
-    participants: "",
-    rating: "",
-    discount: "",
+    startDate: "",
+    endDate: "",
+    targetAudience: "",
     imageUrl: "",
-    dosha: "", // Added dosha field
   });
 
   const [errors, setErrors] = useState({});
@@ -20,10 +18,7 @@ function AddCampaign() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-  // Added dosha recommendations state
-  const [doshaRecommendations, setDoshaRecommendations] = useState(null);
-  const [showRecommendations, setShowRecommendations] = useState(false);
-  const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(false);
+  // Removed unused dosha recommendation states for campaigns
 
   const navigate = useNavigate();
 
@@ -37,46 +32,10 @@ function AddCampaign() {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
     
-    // Fetch dosha recommendations when dosha is selected
-    if (name === "dosha" && value) {
-      fetchDoshaRecommendations(value);
-    } else if (name === "dosha" && !value) {
-      // Clear recommendations if dosha is deselected
-      setDoshaRecommendations(null);
-      setShowRecommendations(false);
-    }
+    // Removed dosha recommendation logic for campaigns
   };
 
-  // Fetch dosha recommendations from backend
-  const fetchDoshaRecommendations = async (dosha) => {
-    console.log(`Fetching recommendations for dosha: ${dosha}`);
-    setIsLoadingRecommendations(true);
-    
-    try {
-      const response = await axios.get(`http://localhost:5016/routines/dosha/${dosha}`);
-      console.log('Dosha recommendations response:', response.data);
-      
-      if (response.data && response.data.recommendations) {
-        setDoshaRecommendations(response.data.recommendations);
-        setShowRecommendations(true);
-        // Clear any previous dosha errors
-        setErrors(prev => ({ ...prev, dosha: "" }));
-      } else {
-        throw new Error("Invalid response format");
-      }
-    } catch (error) {
-      console.error("Failed to fetch dosha recommendations:", error);
-      console.error("Error details:", error.response?.data);
-      setErrors(prev => ({ 
-        ...prev, 
-        dosha: "Failed to load recommendations. Please try selecting the dosha again." 
-      }));
-      setDoshaRecommendations(null);
-      setShowRecommendations(false);
-    } finally {
-      setIsLoadingRecommendations(false);
-    }
-  };
+  // Removed dosha recommendation function for campaigns
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -133,17 +92,13 @@ function AddCampaign() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!inputs.campaignName.trim()) newErrors.campaignName = "Campaign name is required";
+    if (!inputs.title.trim()) newErrors.title = "Campaign title is required";
     if (!inputs.description.trim()) newErrors.description = "Description is required";
     else if (inputs.description.length < 10) newErrors.description = "Description must be at least 10 characters";
     if (!inputs.status) newErrors.status = "Status is required";
-    if (!inputs.deadline) newErrors.deadline = "Deadline is required";
-    if (!inputs.participants) newErrors.participants = "Number of participants is required";
-    else if (isNaN(inputs.participants) || inputs.participants < 0) newErrors.participants = "Participants must be a positive number";
-    if (!inputs.rating) newErrors.rating = "Rating is required";
-    else if (isNaN(inputs.rating) || inputs.rating < 1 || inputs.rating > 5) newErrors.rating = "Rating must be between 1 and 5";
-    if (!inputs.discount) newErrors.discount = "Discount is required";
-    else if (isNaN(inputs.discount) || inputs.discount < 0 || inputs.discount > 100) newErrors.discount = "Discount must be between 0 and 100";
+    if (!inputs.startDate) newErrors.startDate = "Start date is required";
+    if (!inputs.endDate) newErrors.endDate = "End date is required";
+    if (!inputs.targetAudience.trim()) newErrors.targetAudience = "Target audience is required";
     if (!imageFile && !inputs.imageUrl.trim()) newErrors.image = "Please upload an image or provide an image URL";
     else if (inputs.imageUrl && !isValidImageUrl(inputs.imageUrl)) newErrors.image = "Please provide a valid image URL";
 
@@ -153,7 +108,16 @@ function AddCampaign() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    console.log("=== FORM SUBMISSION STARTED ===");
+    console.log("Form inputs:", inputs);
+    console.log("Image file:", imageFile);
+    
+    if (!validateForm()) {
+      console.log("Form validation failed, stopping submission");
+      return;
+    }
+    
+    console.log("Form validation passed, proceeding with submission");
 
     setIsSubmitting(true);
     try {
@@ -175,21 +139,41 @@ function AddCampaign() {
     let formData;
     if (imageFile) {
       formData = new FormData();
-      Object.keys(inputs).forEach((key) => {
-        if (key !== "imageUrl") formData.append(key, inputs[key]);
-      });
+      // Append all input fields to FormData
+      formData.append("title", inputs.title);
+      formData.append("description", inputs.description);
+      formData.append("status", inputs.status);
+      formData.append("startDate", inputs.startDate);
+      formData.append("endDate", inputs.endDate);
+      formData.append("targetAudience", inputs.targetAudience);
+      if (inputs.imageUrl) {
+        formData.append("imageUrl", inputs.imageUrl);
+      }
       formData.append("image", imageFile);
     } else {
       formData = {
-        ...inputs,
-        participants: Number(inputs.participants),
-        rating: Number(inputs.rating),
-        discount: Number(inputs.discount),
+        title: inputs.title,
+        description: inputs.description,
+        status: inputs.status,
+        startDate: inputs.startDate,
+        endDate: inputs.endDate,
+        targetAudience: inputs.targetAudience,
+        imageUrl: inputs.imageUrl || ""
       };
     }
 
+    console.log("Sending campaign data:", formData instanceof FormData ? "FormData" : formData);
+    
+    // Debug: Log FormData contents
+    if (formData instanceof FormData) {
+      console.log("FormData contents:");
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+      }
+    }
+
     const res = await axios.post(
-      "http://localhost:5016/campaigns", // backend port
+      "http://localhost:5000/campaigns",
       formData,
       imageFile ? { headers: { "Content-Type": "multipart/form-data" } } : {}
     );
@@ -198,13 +182,12 @@ function AddCampaign() {
 
   const handleReset = () => {
     setInputs({
-      campaignName: "",
+      title: "",
       description: "",
       status: "",
-      deadline: "",
-      participants: "",
-      rating: "",
-      discount: "",
+      startDate: "",
+      endDate: "",
+      targetAudience: "",
       imageUrl: "",
     });
     setErrors({});
@@ -270,23 +253,23 @@ function AddCampaign() {
 
         <div className="bg-white rounded-lg shadow-lg border border-green-200 p-8">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Campaign Name */}
+            {/* Campaign Title */}
             <div>
-              <label htmlFor="campaignName" className="block text-sm font-semibold text-green-800 mb-2">
-                Campaign Name
+              <label htmlFor="title" className="block text-sm font-semibold text-green-800 mb-2">
+                Campaign Title
               </label>
               <input
                 type="text"
-                id="campaignName"
-                name="campaignName"
-                value={inputs.campaignName}
+                id="title"
+                name="title"
+                value={inputs.title}
                 onChange={handleChange}
-                placeholder="Enter campaign name"
+                placeholder="Enter campaign title"
                 className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors ${
-                  errors.campaignName ? "border-red-300 focus:border-red-500" : "border-green-200 focus:border-green-500"
+                  errors.title ? "border-red-300 focus:border-red-500" : "border-green-200 focus:border-green-500"
                 }`}
               />
-              {errors.campaignName && <p className="mt-1 text-sm text-red-600">{errors.campaignName}</p>}
+              {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
             </div>
 
             {/* Campaign Image */}
@@ -387,91 +370,62 @@ function AddCampaign() {
                 >
                   <option value="">Select status</option>
                   <option value="active">Active</option>
-                  <option value="upcoming">Upcoming</option>
+                  <option value="inactive">Inactive</option>
                   <option value="completed">Completed</option>
-                  <option value="draft">Draft</option>
                 </select>
                 {errors.status && <p className="mt-1 text-sm text-red-600">{errors.status}</p>}
               </div>
               <div>
-                <label htmlFor="deadline" className="block text-sm font-semibold text-green-800 mb-2">
-                  Campaign Deadline
+                <label htmlFor="startDate" className="block text-sm font-semibold text-green-800 mb-2">
+                  Start Date
                 </label>
                 <input
                   type="date"
-                  id="deadline"
-                  name="deadline"
-                  value={inputs.deadline}
+                  id="startDate"
+                  name="startDate"
+                  value={inputs.startDate}
                   onChange={handleChange}
                   className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    errors.deadline ? "border-red-300 focus:border-red-500" : "border-green-200 focus:border-green-500"
+                    errors.startDate ? "border-red-300 focus:border-red-500" : "border-green-200 focus:border-green-500"
                   }`}
                 />
-                {errors.deadline && <p className="mt-1 text-sm text-red-600">{errors.deadline}</p>}
+                {errors.startDate && <p className="mt-1 text-sm text-red-600">{errors.startDate}</p>}
+              </div>
+              <div>
+                <label htmlFor="endDate" className="block text-sm font-semibold text-green-800 mb-2">
+                  End Date
+                </label>
+                <input
+                  type="date"
+                  id="endDate"
+                  name="endDate"
+                  value={inputs.endDate}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${
+                    errors.endDate ? "border-red-300 focus:border-red-500" : "border-green-200 focus:border-green-500"
+                  }`}
+                />
+                {errors.endDate && <p className="mt-1 text-sm text-red-600">{errors.endDate}</p>}
               </div>
             </div>
 
-            {/* Participants, Rating, Discount */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <label htmlFor="participants" className="block text-sm font-semibold text-green-800 mb-2">
-                  Target Participants
-                </label>
-                <input
-                  type="number"
-                  id="participants"
-                  name="participants"
-                  value={inputs.participants}
-                  onChange={handleChange}
-                  placeholder="100"
-                  min="0"
-                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    errors.participants ? "border-red-300 focus:border-red-500" : "border-green-200 focus:border-green-500"
-                  }`}
-                />
-                {errors.participants && <p className="mt-1 text-sm text-red-600">{errors.participants}</p>}
-              </div>
-
-              <div>
-                <label htmlFor="rating" className="block text-sm font-semibold text-green-800 mb-2">
-                  Expected Rating
-                </label>
-                <input
-                  type="number"
-                  id="rating"
-                  name="rating"
-                  value={inputs.rating}
-                  onChange={handleChange}
-                  placeholder="4.5"
-                  min="1"
-                  max="5"
-                  step="0.1"
-                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    errors.rating ? "border-red-300 focus:border-red-500" : "border-green-200 focus:border-green-500"
-                  }`}
-                />
-                {errors.rating && <p className="mt-1 text-sm text-red-600">{errors.rating}</p>}
-              </div>
-
-              <div>
-                <label htmlFor="discount" className="block text-sm font-semibold text-green-800 mb-2">
-                  Discount (%)
-                </label>
-                <input
-                  type="number"
-                  id="discount"
-                  name="discount"
-                  value={inputs.discount}
-                  onChange={handleChange}
-                  placeholder="10"
-                  min="0"
-                  max="100"
-                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    errors.discount ? "border-red-300 focus:border-red-500" : "border-green-200 focus:border-green-500"
-                  }`}
-                />
-                {errors.discount && <p className="mt-1 text-sm text-red-600">{errors.discount}</p>}
-              </div>
+            {/* Target Audience */}
+            <div>
+              <label htmlFor="targetAudience" className="block text-sm font-semibold text-green-800 mb-2">
+                Target Audience
+              </label>
+              <input
+                type="text"
+                id="targetAudience"
+                name="targetAudience"
+                value={inputs.targetAudience}
+                onChange={handleChange}
+                placeholder="e.g., Health enthusiasts, Yoga practitioners, Wellness beginners"
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${
+                  errors.targetAudience ? "border-red-300 focus:border-red-500" : "border-green-200 focus:border-green-500"
+                }`}
+              />
+              {errors.targetAudience && <p className="mt-1 text-sm text-red-600">{errors.targetAudience}</p>}
             </div>
 
             {/* Buttons */}

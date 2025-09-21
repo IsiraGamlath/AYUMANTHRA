@@ -5,8 +5,8 @@ import camp2Img from "../../assets/campaign2.jpg";
 import user1Img from "../../assets/user1.jpg";
 import axios from "axios";
 
-const CAMPAIGNS_URL = "http://localhost:5016/campaigns";
-const OFFERS_URL = "http://localhost:5016/offers";
+const CAMPAIGNS_URL = "http://localhost:5000/campaigns";
+const OFFERS_URL = "http://localhost:5000/offercampaigns";
 
 const fetchCampaigns = async () => {
   try {
@@ -125,12 +125,12 @@ const CampaignPage = () => {
     
     // If it starts with /uploads, it's a local upload - prepend the backend URL
     if (item.imageUrl.startsWith('/uploads')) {
-      return `http://localhost:5016${item.imageUrl}`;
+      return `http://localhost:5000${item.imageUrl}`;
     }
     
     // If it's just a filename, assume it's in uploads folder
     if (!item.imageUrl.startsWith('/')) {
-      return `http://localhost:5016/uploads/${item.imageUrl}`;
+      return `http://localhost:5000/uploads/${item.imageUrl}`;
     }
     
     // Default fallback

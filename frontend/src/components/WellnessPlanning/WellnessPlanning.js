@@ -4,7 +4,7 @@ import { Calendar, Plus, Clock, Leaf, Heart, Target, Sun, Moon, Star, CheckCircl
 import "./WellnessPlanning.css";
 import heroImage from "../../assets/hero.jpg";
 
-const URL = "http://localhost:5016/wellness";
+const URL = "http://localhost:5000/wellness";
 
 const AyuManthra = () => {
   const [showCalendar, setShowCalendar] = useState(false);

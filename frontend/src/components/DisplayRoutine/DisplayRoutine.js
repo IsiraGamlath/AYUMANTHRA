@@ -13,7 +13,7 @@ function DisplayRoutine() {
   const [filterTimeOfDay, setFilterTimeOfDay] = useState("");
   const [expandedRoutines, setExpandedRoutines] = useState({});
 
-  const API_URL = "http://localhost:5016/routines";
+  const API_URL = "http://localhost:5000/routines";
 
   // Fetch routines from backend
   const fetchHandler = async () => {

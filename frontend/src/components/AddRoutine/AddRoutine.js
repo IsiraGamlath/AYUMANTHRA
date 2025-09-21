@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import axios from "axios";
@@ -32,6 +32,16 @@ function AddRoutine() {
 
   const navigate = useNavigate();
 
+  // Cleanup effect to prevent stuck states
+  useEffect(() => {
+    return () => {
+      // Reset loading states when component unmounts
+      setIsSubmitting(false);
+      setIsLoadingRecommendations(false);
+    };
+  }, []);
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputs((prev) => ({
@@ -60,8 +70,15 @@ function AddRoutine() {
     setIsLoadingRecommendations(true);
     
     try {
-      // IMPORTANT: Use the correct endpoint structure
-      const response = await axios.get(`http://localhost:5016/routines/dosha/${dosha}`);
+      // Add timeout to prevent hanging
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
+      const response = await axios.get(`http://localhost:5000/routines/dosha/${dosha}`, {
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
       console.log('Dosha recommendations response:', response.data);
       
       if (response.data && response.data.recommendations) {
@@ -75,10 +92,18 @@ function AddRoutine() {
     } catch (error) {
       console.error("Failed to fetch dosha recommendations:", error);
       console.error("Error details:", error.response?.data);
-      setErrors(prev => ({ 
-        ...prev, 
-        dosha: "Failed to load recommendations. Please try selecting the dosha again." 
-      }));
+      
+      if (error.name === 'AbortError') {
+        setErrors(prev => ({ 
+          ...prev, 
+          dosha: "Request timed out. Please check your connection and try again." 
+        }));
+      } else {
+        setErrors(prev => ({ 
+          ...prev, 
+          dosha: "Failed to load recommendations. Please try selecting the dosha again." 
+        }));
+      }
       setDoshaRecommendations(null);
       setShowRecommendations(false);
     } finally {
@@ -123,11 +148,10 @@ function AddRoutine() {
     
     if (!inputs.duration) {
       newErrors.duration = "Duration is required";
-    } else {
-      const duration = Number(inputs.duration);
-      if (isNaN(duration) || duration < 1 || duration > 480) {
-        newErrors.duration = "Duration must be between 1 and 480 minutes";
-      }
+    } else if (inputs.duration.trim().length < 2) {
+      newErrors.duration = "Duration must be at least 2 characters";
+    } else if (inputs.duration.length > 50) {
+      newErrors.duration = "Duration must be less than 50 characters";
     }
     
     if (!inputs.difficulty) {
@@ -148,26 +172,39 @@ function AddRoutine() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("=== FORM SUBMISSION STARTED ===");
+    console.log("Form inputs:", inputs);
+    console.log("Custom inputs:", customInputs);
     
     if (!validateForm()) {
-      console.log("Form validation failed:", errors);
+      console.log("Form validation failed, stopping submission");
       return;
     }
 
+    console.log("Form validation passed, proceeding with submission");
     setIsSubmitting(true);
     try {
-      await sendRequest();
+      const result = await sendRequest();
+      console.log("Routine created successfully:", result);
       setShowSuccess(true);
       setTimeout(() => {
         setShowSuccess(false);
         navigate("/display-routines");
       }, 2000);
     } catch (error) {
-      console.error("Error creating routine:", error);
+      console.error("=== ERROR IN FORM SUBMISSION ===");
+      console.error("Error object:", error);
+      console.error("Error message:", error.message);
+      console.error("Error response:", error.response);
+      console.error("Error response data:", error.response?.data);
+      console.error("Error response status:", error.response?.status);
+      
       const errorMessage = error.response?.data?.message || error.message || "Error creating routine. Please try again.";
+      console.error("Final error message:", errorMessage);
       alert(errorMessage);
     } finally {
       setIsSubmitting(false);
+      console.log("=== FORM SUBMISSION ENDED ===");
     }
   };
 
@@ -185,20 +222,48 @@ function AddRoutine() {
       userLifestyle: customInputs.userLifestyle,
     };
 
-    // Debug: Log request data
-    console.log("Request data being sent:", requestData);
+    console.log("=== SENDING REQUEST ===");
+    console.log("Request data:", requestData);
+    console.log("API URL: http://localhost:5000/routines");
 
-    const response = await axios.post(
-      "http://localhost:5016/routines",
-      requestData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+    // Add timeout to prevent hanging
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
+    try {
+      console.log("Making axios POST request...");
+      const response = await axios.post(
+        "http://localhost:5000/routines",
+        requestData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          signal: controller.signal
+        }
+      );
+      
+      console.log("Axios response received:", response);
+      console.log("Response status:", response.status);
+      console.log("Response data:", response.data);
+      
+      clearTimeout(timeoutId);
+      return response.data;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      console.error("=== AXIOS ERROR ===");
+      console.error("Error name:", error.name);
+      console.error("Error message:", error.message);
+      console.error("Error code:", error.code);
+      console.error("Error config:", error.config);
+      console.error("Error request:", error.request);
+      console.error("Error response:", error.response);
+      
+      if (error.name === 'AbortError') {
+        throw new Error("Request timed out. Please check your connection and try again.");
       }
-    );
-    
-    return response.data;
+      throw error;
+    }
   };
 
   const handleReset = () => {
@@ -222,6 +287,9 @@ function AddRoutine() {
     setErrors({});
     setDoshaRecommendations(null);
     setShowRecommendations(false);
+    // Reset loading states
+    setIsSubmitting(false);
+    setIsLoadingRecommendations(false);
   };
 
   // Navigate back to WellnessPlanning page
@@ -392,17 +460,15 @@ function AddRoutine() {
               {/* Duration */}
               <div>
                 <label htmlFor="duration" className="block text-sm font-semibold text-green-800 mb-2">
-                  Duration (minutes) *
+                  Duration *
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   id="duration"
                   name="duration"
                   value={inputs.duration}
                   onChange={handleChange}
-                  placeholder="30"
-                  min="1"
-                  max="480"
+                  placeholder="e.g., 30 minutes, 1 hour, 45 minutes"
                   className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${
                     errors.duration ? "border-red-300 focus:border-red-500" : "border-green-200 focus:border-green-500"
                   }`}
@@ -425,9 +491,9 @@ function AddRoutine() {
                   }`}
                 >
                   <option value="">Select Level</option>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
                 </select>
                 {errors.difficulty && <p className="mt-1 text-sm text-red-600">{errors.difficulty}</p>}
               </div>
@@ -447,9 +513,10 @@ function AddRoutine() {
                   }`}
                 >
                   <option value="">Select Time</option>
-                  <option value="morning">Morning</option>
-                  <option value="afternoon">Afternoon</option>
-                  <option value="evening">Evening</option>
+                  <option value="Morning">Morning</option>
+                  <option value="Afternoon">Afternoon</option>
+                  <option value="Evening">Evening</option>
+                  <option value="Night">Night</option>
                 </select>
                 {errors.timeOfDay && <p className="mt-1 text-sm text-red-600">{errors.timeOfDay}</p>}
               </div>

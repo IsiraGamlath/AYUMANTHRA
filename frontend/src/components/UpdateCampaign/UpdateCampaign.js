@@ -26,7 +26,7 @@ function UpdateCampaign() {
   useEffect(() => {
     const fetchHandler = async () => {
       try {
-        const response = await axios.get(`http://localhost:5016/campaigns/${id}`);
+        const response = await axios.get(`http://localhost:5000/campaigns/${id}`);
         const campaign = response.data.campaign || response.data;
         setInputs({
           campaignName: campaign.campaignName || '',
@@ -83,7 +83,7 @@ function UpdateCampaign() {
     }
 
     await axios.put(
-      `http://localhost:5016/campaigns/${id}`,
+      `http://localhost:5000/campaigns/${id}`,
       campaignData,
       imageFile ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}
     );
@@ -302,9 +302,8 @@ function UpdateCampaign() {
                 >
                   <option value="">Select status</option>
                   <option value="active">Active</option>
-                  <option value="upcoming">Upcoming</option>
+                  <option value="inactive">Inactive</option>
                   <option value="completed">Completed</option>
-                  <option value="draft">Draft</option>
                 </select>
                 {errors.status && <p className="mt-1 text-sm text-red-600">{errors.status}</p>}
               </div>

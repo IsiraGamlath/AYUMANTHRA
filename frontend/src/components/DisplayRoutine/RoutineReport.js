@@ -26,7 +26,7 @@ function RoutineReport() {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [downloadMessage, setDownloadMessage] = useState("");
 
-  const API_URL = "http://localhost:5016/routines";
+  const API_URL = "http://localhost:5000/routines";
 
   // Fetch routine data
   useEffect(() => {

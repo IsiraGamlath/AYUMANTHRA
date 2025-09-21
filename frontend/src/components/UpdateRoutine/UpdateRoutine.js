@@ -83,7 +83,7 @@ function UpdateRoutine() {
       
       try {
         setIsLoading(true);
-        const apiUrl = `http://localhost:5016/routines/${id}`;
+        const apiUrl = `http://localhost:5000/routines/${id}`;
         console.log('Making API call to:', apiUrl);
         
         const res = await axios.get(apiUrl);
@@ -204,7 +204,7 @@ function UpdateRoutine() {
       console.log('Update data:', updateData);
 
       // Use the correct API endpoint based on your router structure
-      const apiUrl = `http://localhost:5016/routines/${id}`;
+      const apiUrl = `http://localhost:5000/routines/${id}`;
       console.log('Making PUT request to:', apiUrl);
 
       const response = await axios.put(apiUrl, updateData, {

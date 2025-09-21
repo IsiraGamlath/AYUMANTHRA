@@ -23,8 +23,8 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-const API_URL = "http://localhost:5016/offers";
-const BASE_URL = "http://localhost:5016";
+const API_URL = "http://localhost:5000/offercampaigns";
+const BASE_URL = "http://localhost:5000";
 
 // Helper function to fetch offers
 const fetchOffers = async () => {
