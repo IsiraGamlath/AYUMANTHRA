@@ -1,7 +1,7 @@
 // Sidebar.js - Updated with Navigation
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, Package, ShoppingCart, Activity, X, Settings } from 'lucide-react';
+import { Home, Package, ShoppingCart, Activity, X, Settings, BarChart3 } from 'lucide-react';
 import './Sidebar.css';
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
@@ -13,6 +13,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
     { icon: Package, label: 'Inventory', path: '/inventory', active: location.pathname === '/inventory' },
     { icon: ShoppingCart, label: 'AddCart', path: '/home', active: location.pathname === '/home' },
     { icon: Activity, label: 'WellnessPlanning', path: '/wellness', active: location.pathname === '/wellness' },
+    { icon: BarChart3, label: 'Reports', path: '/reports', active: location.pathname === '/reports' },
     { icon: Settings, label: 'Project Management', path: '/management', active: location.pathname === '/management' }
   ];
 
