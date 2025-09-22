@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Sidebar from "../../components/Nav/DNav";
+import Sidebar from "../../components/Nav/DocNav/DNav";
+import { FaBell } from "react-icons/fa"; // ✅ Font Awesome bell icon
 import "./DoctorProfile.css";
+import { useNavigate } from "react-router-dom"; // ✅ Navigation hook
 
 const DoctorProfile = () => {
   const [doctor, setDoctor] = useState(null);
@@ -17,7 +19,8 @@ const DoctorProfile = () => {
     available: true,
   });
 
-  const doctorId = localStorage.getItem("doctorId"); // Logged-in doctor ID
+  const navigate = useNavigate(); // ✅ to navigate to appointments page
+  const doctorId = localStorage.getItem("doctorId");
 
   useEffect(() => {
     const fetchDoctor = async () => {
@@ -29,7 +32,7 @@ const DoctorProfile = () => {
         }
 
         const response = await axios.get(`http://localhost:5000/doctors/${doctorId}`);
-        const data = response.data.doctor; // ✅ Correct: backend returns { doctor }
+        const data = response.data.doctor;
 
         setDoctor(data);
         setForm({
@@ -64,7 +67,7 @@ const DoctorProfile = () => {
     e.preventDefault();
     try {
       const res = await axios.put(`http://localhost:5000/doctors/${doctorId}`, form);
-      setDoctor(res.data.doctor); // ✅ Correct
+      setDoctor(res.data.doctor);
       setEditing(false);
       alert("Profile updated successfully!");
     } catch (err) {
@@ -80,7 +83,21 @@ const DoctorProfile = () => {
     <div className="doctor-page-container">
       <Sidebar />
       <div className="doctor-profile-content">
-        <h1>Doctor Profile</h1>
+        <div className="profile-header">
+          <h1>Doctor Profile</h1>
+
+          <div className="header-actions">
+            {/* ✅ My Appointments button */}
+            <button
+              className="appointments-btn"
+              onClick={() => navigate("/doctor/appointments")}
+            >
+              My Appointments
+            </button>
+
+            <FaBell className="notification-bell" title="Notifications" />
+          </div>
+        </div>
 
         {!editing ? (
           <div className="profile-view">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Doctor from "./Doctors";
-import Nav from '../../components/Nav/Nav';
+import Nav from '../../components/Nav/Comnav/Nav';
 import './DoctorHome.css';
 import { GrAdd } from 'react-icons/gr';
 import DaddUser from './DaddUser';

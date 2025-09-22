@@ -1,138 +1,335 @@
-/* General */
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f8f9fa;
-  margin: 0;
-  padding: 0;
-}
-
-/* Page heading */
+/* Admin Dashboard Styles */
 .admin-title {
   text-align: center;
-  margin-top: 20px;
-  color: #333;
-  font-size: 26px;
+  color: #2c3e50;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 2rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Buttons */
+/* Action Buttons */
 .action-buttons {
-  text-align: center;
-  margin: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
 }
 
 .btn {
-  padding: 10px 20px;
-  font-weight: bold;
+  padding: 12px 24px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  margin-right: 15px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .btn-primary {
-  background: #007bff;
-  color: #fff;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
 }
 
 .btn-primary:hover {
-  background: #0056b3;
+  background: linear-gradient(135deg, #0056b3, #004085);
 }
 
 .btn-success {
-  background: #28a745;
-  color: #fff;
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+  color: white;
 }
 
 .btn-success:hover {
-  background: #1e7e34;
+  background: linear-gradient(135deg, #1e7e34, #155724);
 }
 
 /* Dashboard Cards */
 .dashboard-cards {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 50px;
-  margin-top: 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 3rem auto;
+  max-width: 1200px;
+  padding: 0 1rem;
 }
 
 .card {
-  flex: 1 1 200px;
-  max-width: 260px;
-  background: #fff;
-  padding: 15px;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  border-radius: 16px;
+  padding: 3rem;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #007bff, #28a745, #ffc107);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.card h3 {
+  color: #2c3e50;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
 }
 
 .card .count {
-  font-size: 22px;
+  font-size: 3rem;
   font-weight: bold;
+  color: #007bff;
+  margin: 1rem 0;
+  text-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
 }
 
 .card .active {
   color: #28a745;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
 }
 
 .card .inactive {
   color: #dc3545;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
 }
 
-/* Charts */
+/* Charts Section */
 .charts {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 50px;
-  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin: 3rem auto;
+  max-width: 1200px;
+  padding: 0 1rem;
 }
 
 .chart-card {
-  flex: 1 1 280px;
-  max-width: 300px;
-  background: #e0e0e0;
-  padding: 15px;
-  border-radius: 10px;
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.chart-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.chart-card h3 {
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  color: #2c3e50;
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
 }
 
 .chart {
+  height: 300px;
   width: 100%;
-  height: 220px;
 }
 
-/* Modal */
+/* Modal Styles */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  backdrop-filter: blur(4px);
 }
 
 .modal {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  width: 500px;
-  max-height: 90vh;
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .modal-close {
-  float: right;
-  background: red;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #dc3545;
   color: white;
   border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 1.2rem;
+  font-weight: bold;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+  background: #c82333;
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-title {
+    font-size: 2rem;
+    margin: 1.5rem 0;
+  }
+
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 2rem auto;
+  }
+
+  .charts {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 2rem auto;
+  }
+
+  .chart-card {
+    padding: 1.5rem;
+  }
+
+  .chart {
+    height: 250px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .modal {
+    width: 95%;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 450px) {
+  .admin-title {
+    font-size: 1.8rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .card .count {
+    font-size: 2.5rem;
+  }
+
+  .chart {
+    height: 200px;
+  }
+
+  .dashboard-cards {
+    padding: 0 0.5rem;
+  }
+
+  .charts {
+    padding: 0 0.5rem;
+  }
+}
+
+/* Loading and Animation States */
+.card, .chart-card {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom Scrollbar for Modal */
+.modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Focus States for Accessibility */
+.btn:focus {
+  outline: 3px solid rgba(0, 123, 255, 0.3);
+  outline-offset: 2px;
+}
+
+.modal-close:focus {
+  outline: 3px solid rgba(220, 53, 69, 0.3);
+  outline-offset: 2px;
 }

@@ -1,7 +1,7 @@
 // UserHome.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Nav from '../../components/Nav/Nav';
+import Nav from '../../components/Nav/Comnav/Nav';
 import './UserHome.css';
 import { GrAdd } from 'react-icons/gr';
 import { FiToggleLeft, FiToggleRight } from 'react-icons/fi'; // icons for toggle

@@ -1,0 +1,112 @@
+/* pages/Profile/PMProfile.css */
+
+.pm-page-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f6fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.pm-profile-content {
+  flex: 1;
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pm-profile-content h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.profile-view p {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.profile-view button {
+  margin-top: 20px;
+  padding: 10px 25px;
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.profile-view button:hover {
+  background-color: #45a049;
+}
+
+/* Edit form styling */
+.profile-edit-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-edit-form label {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.profile-edit-form input,
+.profile-edit-form select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.profile-edit-form button {
+  margin-top: 20px;
+  padding: 10px 25px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.profile-edit-form button[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+}
+
+.profile-edit-form button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.profile-edit-form button[type="button"] {
+  background-color: #f44336;
+  color: white;
+  margin-left: 10px;
+}
+
+.profile-edit-form button[type="button"]:hover {
+  background-color: #e53935;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .pm-profile-content {
+    padding: 20px;
+  }
+
+  .profile-edit-form input,
+  .profile-edit-form select {
+    font-size: 14px;
+  }
+
+  .profile-view p {
+    font-size: 14px;
+  }
+}

@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BiHome, BiLogOut } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
-import profilePic from "./images/logo.png"; // replace with your actual logo/image path
+import profilePic from "../images/logo.png"; // replace with your actual logo/image path
 import "./DNav.css"; // make sure this CSS file exists
 
 const Sidebar = () => {

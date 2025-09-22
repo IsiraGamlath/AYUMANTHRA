@@ -4,7 +4,7 @@ import "./Nav.css";
 import { BiHome, BiLogOut, BiUser } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
 import { RiAdminFill } from "react-icons/ri";
-import profilePic from "./images/logo.png";
+import profilePic from "../images/logo.png";
 
 const Sidebar = ({ onProfileClick }) => {
   const navigate = useNavigate();
@@ -50,6 +50,24 @@ const Sidebar = ({ onProfileClick }) => {
           <Link to="/UserHome">
             <BiUser className="icon" />
             User Management
+          </Link>
+        </li>
+        <li>
+          <Link to="/supplierHome">
+            <BiUser className="icon" />
+            Supplier Management
+          </Link>
+        </li>
+        <li>
+          <Link to="/supplierHome">
+            <BiUser className="icon" />
+            Appoinments
+          </Link>
+        </li>
+        <li>
+          <Link to="/supplierHome">
+            <BiUser className="icon" />
+            Doctor Availability
           </Link>
         </li>
 

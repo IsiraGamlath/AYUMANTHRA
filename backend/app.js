@@ -7,7 +7,9 @@ const User = require('./model/User');
 const userRoutes = require('./routes/userRoutes'); // Updated import
 const doctorRoutes = require('./routes/doctorRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-
+const inventoryManagerRoutes = require('./routes/imRoutes');
+const pmRoutes = require('./routes/pmRoutes');
+const supplierRoutes = require('./routes/supplierRoutes');
 
 const app = express();
 const port = 5000;
@@ -28,7 +30,9 @@ mongoose.connect("mongodb+srv://it23688568:UR6FwT8ggNBM4pti@cluster0.ijo2aeo.mon
 app.use('/users', userRoutes); // Use the correct route file
 app.use('/doctors', doctorRoutes);//added doctor routes
 app.use('/admins', adminRoutes);
-
+app.use('/inventory-managers', inventoryManagerRoutes);
+app.use('/project-managers', pmRoutes);
+app.use('/suppliers', supplierRoutes);
 
 // Start the server
 app.listen(port, () => {

@@ -8,7 +8,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import Nav from "../../components/Nav/Nav";
+import Nav from "../../components/Nav/Comnav/Nav";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import AdminProfile from "./AdminProfile"; // ✅ Make sure path is correct
