@@ -67,7 +67,7 @@ const Availability = ({ doctorId, patientId }) => {
     
     if (isAfter530PM()) {
       try {
-        await axios.post('http://localhost:3000/api/availability/remove-current-day-slots', {
+        await axios.post('http://localhost:5000/api/availability/remove-current-day-slots', {
           doctorId
         });
         console.log('✅ Removed all available slots for today after 5:30 PM');
@@ -83,7 +83,7 @@ const Availability = ({ doctorId, patientId }) => {
     async (startDate) => {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/api/availability/week?doctorId=${doctorId}&startDate=${startDate}`
+          `http://localhost:5000/api/availability/week?doctorId=${doctorId}&startDate=${startDate}`
         );
         setAvailability(data);
       } catch (err) {
@@ -120,7 +120,7 @@ const Availability = ({ doctorId, patientId }) => {
     if (rescheduleMode && rescheduleAppointment) {
       try {
         await axios.delete(
-          `http://localhost:3000/api/appointment/${rescheduleAppointment._id}`
+          `http://localhost:5000/api/appointment/${rescheduleAppointment._id}`
         );
 
         const newAppointment = {
@@ -136,7 +136,7 @@ const Availability = ({ doctorId, patientId }) => {
         };
 
         await axios.post(
-          "http://localhost:3000/api/appointment",
+          "http://localhost:5000/api/appointment",
           newAppointment
         );
 
@@ -177,7 +177,7 @@ const Availability = ({ doctorId, patientId }) => {
         const shouldShowMessage = isToday && isAfter530 && day.slots.length === 0;
         
         return (
-          <div className="day-container" key={day.date}>
+          <div className={`day-container ${isToday ? 'today' : ''}`} key={day.date}>
             <h4>{day.date} {isToday ? '(Today)' : ''}</h4>
             
             {shouldShowMessage && (
@@ -200,9 +200,19 @@ const Availability = ({ doctorId, patientId }) => {
                     ? "(Passed)"
                     : "";
 
+                  // Determine CSS classes for the slot item
+                  let slotClasses = "slot-item";
+                  if (isBooked) {
+                    slotClasses += " unavailable booked";
+                  } else if (isPast && !isBooked) {
+                    slotClasses += " unavailable past";
+                  } else if (isUnavailable) {
+                    slotClasses += " unavailable";
+                  }
+
                   return (
                     <div
-                      className={`slot-item ${isUnavailable ? "unavailable" : ""} ${isPast && !isBooked ? "past" : ""}`}
+                      className={slotClasses}
                       key={slot.time || `slot-${Math.random()}`}
                     >
                       <span className="slot-time">

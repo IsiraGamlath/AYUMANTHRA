@@ -24,7 +24,7 @@ const AppointmentBooking = () => {
     const fetchDoctorInfo = async () => {
       if (doctorId) {
         try {
-          const response = await axios.get(`http://localhost:3000/api/doctors/${doctorId}`);
+          const response = await axios.get(`http://localhost:5000/api/doctors/${doctorId}`);
           const doctor = response.data.doctor;
           if (doctor) {
             setDoctorName(`Dr. ${doctor.name}`);
@@ -68,20 +68,20 @@ const AppointmentBooking = () => {
 
     console.log('Appointment mode selected:', appointmentMode);
     
-    // ✅ Patient name validation - only letters and spaces allowed
+    //  Patient name validation - only letters and spaces allowed
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(patientName.trim())) {
       alert("Patient name should only contain letters and spaces. No numbers or special characters allowed.");
       return;
     }
 
-    // ✅ Check for minimum name length
+    //  Check for minimum name length
     if (patientName.trim().length < 2) {
       alert("Patient name must be at least 2 characters long.");
       return;
     }
 
-    // ✅ Age validation with detailed error messages
+    //  Age validation with detailed error messages
     const ageNum = Number(patientAge);
     if (!patientAge || patientAge.trim() === '') {
       alert("Please enter the patient's age.");
@@ -100,7 +100,7 @@ const AppointmentBooking = () => {
       return;
     }
 
-    // ✅ Sri Lankan phone number validation
+    //  Sri Lankan phone number validation
     const sriLankaPhoneRegex = /^(?:\+94\d{9}|07\d{8})$/;
     if (!sriLankaPhoneRegex.test(phoneNumber)) {
       alert("Please enter a valid phone number (e.g., 07XXXXXXXX).");
@@ -112,7 +112,7 @@ const AppointmentBooking = () => {
       return;
     }
 
-    // ✅ Navigate to payment if everything is valid
+    //  Navigate to payment if everything is valid
     navigate("/payment", {
       state: {
         doctorId,
@@ -120,7 +120,7 @@ const AppointmentBooking = () => {
         patientName,
         patientAge,
         phoneNumber,
-        appointmentMode, // Pass appointment mode to payment
+        appointmentMode, 
         date,
         time,
         doctorFee,

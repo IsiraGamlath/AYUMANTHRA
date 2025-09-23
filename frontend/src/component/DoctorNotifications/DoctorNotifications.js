@@ -11,7 +11,7 @@ const DoctorNotifications = ({ doctorId }) => {
     if (doctorId) {
       fetchNotifications();
       // Auto-refresh notifications every 30 seconds
-      const interval = setInterval(fetchNotifications, 30000);
+      const interval = setInterval(fetchNotifications, 5000);
       return () => clearInterval(interval);
     }
   }, [doctorId]);
@@ -21,7 +21,7 @@ const DoctorNotifications = ({ doctorId }) => {
     try {
       // For now, we're using the same endpoint as patients
       // In a real implementation, this would be a doctor-specific endpoint
-      const { data } = await axios.get(`http://localhost:3000/api/doctor/notifications?doctorId=${doctorId}`);
+      const { data } = await axios.get(`http://localhost:5000/api/doctor/notifications?doctorId=${doctorId}`);
       setNotifications(data.notifications || []);
       setUnreadCount(data.unreadCount || 0);
     } catch (error) {
@@ -36,7 +36,7 @@ const DoctorNotifications = ({ doctorId }) => {
   const markAsRead = async (notificationId) => {
     try {
       // In a real implementation, this would be a doctor-specific endpoint
-      await axios.put(`http://localhost:3000/api/doctor/notifications/${notificationId}/read`);
+      await axios.put(`http://localhost:5000/api/doctor/notifications/${notificationId}/read`);
       fetchNotifications(); // Refresh to update read status
     } catch (error) {
       console.error('Error marking notification as read:', error);
@@ -46,7 +46,7 @@ const DoctorNotifications = ({ doctorId }) => {
   const markAllAsRead = async () => {
     try {
       // In a real implementation, this would be a doctor-specific endpoint
-      await axios.put(`http://localhost:3000/api/doctor/notifications/mark-all-read?doctorId=${doctorId}`);
+      await axios.put(`http://localhost:5000/api/doctor/notifications/mark-all-read?doctorId=${doctorId}`);
       fetchNotifications();
     } catch (error) {
       console.error('Error marking all as read:', error);

@@ -19,8 +19,8 @@ const AdminAvailability = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
   
-  // State for tomorrow's appointments
-  const [tomorrowAppointments, setTomorrowAppointments] = useState(null);
+  // State for tomorrow's appointments (initially undefined to distinguish from empty)
+  const [tomorrowAppointments, setTomorrowAppointments] = useState(undefined);
   const [appointmentsLoading, setAppointmentsLoading] = useState(false);
   
   // State for consultation management
@@ -28,10 +28,14 @@ const AdminAvailability = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [consultationLink, setConsultationLink] = useState('');
 
-  // Load doctors and tomorrow's appointments on component mount
+  // State for search functionality
+  const [searchDate, setSearchDate] = useState('');
+  const [searchedAppointments, setSearchedAppointments] = useState(null);
+
+  // Load doctors only on component mount 
   useEffect(() => {
     loadDoctors();
-    loadTomorrowAppointments();
+    
   }, []);
 
   // Load availability when doctor or date changes
@@ -48,7 +52,7 @@ const AdminAvailability = () => {
 
   const loadDoctors = useCallback(async () => {
     try {
-      const { data } = await axios.get('http://localhost:3000/api/doctors');
+      const { data } = await axios.get('http://localhost:5000/api/doctors');
       setDoctors(data.doctors || []);
       // Auto-select first doctor if available
       if (data.doctors && data.doctors.length > 0) {
@@ -66,7 +70,7 @@ const AdminAvailability = () => {
     setLoading(true);
     try {
       const { data } = await axios.get(
-        `http://localhost:3000/api/availability/week?doctorId=${selectedDoctor}&startDate=${date}`
+        `http://localhost:5000/api/availability/week?doctorId=${selectedDoctor}&startDate=${date}`
       );
       // Find the specific date's availability
       const dayAvailability = data.find(day => day.date === date);
@@ -83,33 +87,69 @@ const AdminAvailability = () => {
   const loadTomorrowAppointments = useCallback(async () => {
     setAppointmentsLoading(true);
     try {
-      const { data } = await axios.get('http://localhost:3000/api/appointment/reminder-status');
+      const { data } = await axios.get('http://localhost:5000/api/appointment/upcoming-digital');
+      console.log('Loaded upcoming digital appointments:', data);
       
-      // Add digital and physical appointment counts
-      const digitalAppointments = data.appointments ? data.appointments.filter(app => app.appointmentMode === 'digital') : [];
-      const physicalAppointments = data.appointments ? data.appointments.filter(app => app.appointmentMode === 'physical') : [];
-      
+      // Simplified structure
       setTomorrowAppointments({
-        ...data,
-        digitalAppointments,
-        physicalAppointments,
-        digitalCount: digitalAppointments.length,
-        physicalCount: physicalAppointments.length
+        totalAppointments: data.appointments.length,
+        digitalCount: data.appointments.length,
+        physicalCount: 0,
+        appointments: data.appointments
       });
+      // Clear searched appointments when loading all upcoming appointments
+      setSearchedAppointments(null);
     } catch (error) {
-      console.error('Error loading tomorrow\'s appointments:', error);
+      console.error('Error loading upcoming digital appointments:', error);
       setTomorrowAppointments({ 
         totalAppointments: 0, 
         digitalCount: 0,
         physicalCount: 0,
-        appointments: [],
-        digitalAppointments: [],
-        physicalAppointments: []
+        appointments: []
       });
     } finally {
       setAppointmentsLoading(false);
     }
   }, []);
+
+  // New function to search appointments by date
+  const searchAppointmentsByDate = async (searchDate) => {
+    if (!searchDate) {
+      showMessage('error', 'Please enter a date to search');
+      return;
+    }
+
+    setAppointmentsLoading(true);
+    try {
+      const { data } = await axios.get(`http://localhost:5000/api/appointment/digital-by-date?date=${searchDate}`);
+      console.log('Search appointments by date result:', data);
+      
+      // Simplified structure
+      setSearchedAppointments({
+        totalAppointments: data.appointments.length,
+        digitalCount: data.appointments.length,
+        physicalCount: 0,
+        appointments: data.appointments
+      });
+    } catch (error) {
+      console.error('Error searching digital appointments by date:', error);
+      setSearchedAppointments({ 
+        totalAppointments: 0, 
+        digitalCount: 0,
+        physicalCount: 0,
+        appointments: []
+      });
+      showMessage('error', 'Failed to search appointments');
+    } finally {
+      setAppointmentsLoading(false);
+    }
+  };
+
+  // Function to handle search form submission
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    searchAppointmentsByDate(searchDate);
+  };
 
   const addTimeSlot = async () => {
     if (!selectedDoctor || !date || !newTime) {
@@ -118,7 +158,7 @@ const AdminAvailability = () => {
     }
 
     try {
-      await axios.post('http://localhost:3000/api/availability/add-slot', {
+      await axios.post('http://localhost:5000/api/availability/add-slot', {
         doctorId: selectedDoctor,
         date,
         time: newTime
@@ -141,7 +181,7 @@ const AdminAvailability = () => {
     }
 
     try {
-      await axios.delete('http://localhost:3000/api/availability/remove-slot', {
+      await axios.delete('http://localhost:5000/api/availability/remove-slot', {
         data: {
           doctorId: selectedDoctor,
           date,
@@ -184,7 +224,7 @@ const AdminAvailability = () => {
     try {
       // Remove all available slots
       for (const slot of availableSlots) {
-        await axios.delete('http://localhost:3000/api/availability/remove-slot', {
+        await axios.delete('http://localhost:5000/api/availability/remove-slot', {
           data: {
             doctorId: selectedDoctor,
             date,
@@ -223,7 +263,7 @@ const AdminAvailability = () => {
 
     try {
       for (const time of selectedTimes) {
-        await axios.delete('http://localhost:3000/api/availability/remove-slot', {
+        await axios.delete('http://localhost:5000/api/availability/remove-slot', {
           data: {
             doctorId: selectedDoctor,
             date,
@@ -253,45 +293,88 @@ const AdminAvailability = () => {
   };
 
   const formatTomorrowDate = () => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toLocaleDateString('en-US', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
+    if (searchedAppointments) {
+      return `Appointments for ${searchDate}`;
+    }
+    if (tomorrowAppointments !== undefined) {
+      return "All Upcoming Digital Appointments";
+    }
+    return "No Appointments Loaded";
   };
 
   // Consultation management functions
   const openConsultationModal = (appointment) => {
+    console.log('Opening consultation modal for appointment:', appointment);
     setSelectedAppointment(appointment);
-    setConsultationLink(appointment.consultationLink || '');
+    const link = (appointment.consultationLink && typeof appointment.consultationLink === 'string') ? appointment.consultationLink : '';
+    console.log('Setting consultation link to:', link);
+    setConsultationLink(link);
     setShowConsultationModal(true);
   };
 
   const closeConsultationModal = () => {
+    console.log('Closing consultation modal');
     setShowConsultationModal(false);
     setSelectedAppointment(null);
     setConsultationLink('');
   };
 
   const updateConsultationLink = async () => {
+    console.log('Updating consultation link:', { selectedAppointment, consultationLink });
+    
     if (!selectedAppointment || !consultationLink.trim()) {
       showMessage('error', 'Please enter a consultation link');
       return;
     }
 
     try {
-      await axios.put(
-        `http://localhost:3000/api/appointment/${selectedAppointment._id}/consultation-link`,
+      const response = await axios.put(
+        `http://localhost:5000/api/appointment/${selectedAppointment._id}/consultation-link`,
         { consultationLink: consultationLink.trim() }
       );
+      
+      console.log('Consultation link update response:', response.data);
       showMessage('success', 'Consultation link updated successfully!');
-      loadTomorrowAppointments();
+      
+      // Update the appointment data in the current list without refreshing the entire list
+      const updatedAppointment = response.data.appointment;
+      console.log('Updated appointment data:', updatedAppointment);
+      
+      if (searchedAppointments) {
+        // Update the searched appointments list
+        console.log('Updating searched appointments');
+        setSearchedAppointments(prev => {
+          if (!prev) return prev;
+          const updatedAppointments = prev.appointments.map(app => 
+            app._id === updatedAppointment._id ? updatedAppointment : app
+          );
+          return {
+            ...prev,
+            appointments: updatedAppointments,
+            totalAppointments: updatedAppointments.length,
+            digitalCount: updatedAppointments.length
+          };
+        });
+      } else if (tomorrowAppointments) {
+        // Update the main appointments list
+        console.log('Updating tomorrow appointments');
+        setTomorrowAppointments(prev => {
+          if (!prev) return prev;
+          const updatedAppointments = prev.appointments.map(app => 
+            app._id === updatedAppointment._id ? updatedAppointment : app
+          );
+          return {
+            ...prev,
+            appointments: updatedAppointments,
+            totalAppointments: updatedAppointments.length,
+            digitalCount: updatedAppointments.length
+          };
+        });
+      }
+      
       closeConsultationModal();
     } catch (err) {
-      console.error(err);
+      console.error('Error updating consultation link:', err);
       showMessage('error', `Failed to update consultation link: ${err.response?.data?.message || err.message}`);
     }
   };
@@ -306,50 +389,87 @@ const AdminAvailability = () => {
   const renderDashboardHeader = () => (
     <div className="admin-header">
       <h1>Admin Dashboard</h1>
-      <p>Professional Healthcare Management System</p>
+      <p>Appointments and Doctor Availability Management </p>
     </div>
   );
 
   // Professional tomorrow's appointments section
   const renderTomorrowAppointments = () => (
     <div className="appointments-chart">
-      <h3 className="chart-title">Tomorrow's Appointments ({formatTomorrowDate()})</h3>
+      <h3 className="chart-title">Online Appointments ({formatTomorrowDate()})</h3>
+      
+      {/* Search bar for finding appointments by date */}
+      <div className="search-section">
+        <form onSubmit={handleSearchSubmit} className="date-search-form">
+          <div className="form-group">
+            <label htmlFor="searchDate">Search Appointments by Date:</label>
+            <input
+              type="date"
+              id="searchDate"
+              value={searchDate}
+              onChange={(e) => setSearchDate(e.target.value)}
+              className="form-input"
+            />
+          </div>
+          <div className="search-buttons">
+            <button type="submit" className="btn btn-primary">
+              Search Appointments
+            </button>
+            <button 
+              type="button" 
+              className="btn btn-secondary"
+              onClick={() => {
+                console.log('Show All Upcoming button clicked');
+                setSearchDate('');
+                setSearchedAppointments(null);
+                loadTomorrowAppointments();
+              }}
+            >
+              Show All Upcoming
+            </button>
+          </div>
+        </form>
+      </div>
+      
       {appointmentsLoading ? (
-        <div className="loading">Loading tomorrow's appointments...</div>
+        <div className="loading">Loading appointments...</div>
       ) : (
         <div className="chart-content">
-          {tomorrowAppointments ? (
+          {(searchedAppointments || (tomorrowAppointments !== undefined)) ? (
             <>
               <div className="chart-stats">
                 <div className="stat-card">
-                  <h4>{tomorrowAppointments.totalAppointments}</h4>
-                  <p>Total Appointments</p>
+                  <h4>{(searchedAppointments || tomorrowAppointments || {}).totalAppointments || 0}</h4>
+                  <p>Total Digital Appointments</p>
                 </div>
                 <div className="stat-card">
-                  <h4>{tomorrowAppointments.digitalCount}</h4>
-                  <p>Digital Appointments</p>
+                  <h4>{(searchedAppointments || tomorrowAppointments || {}).digitalCount || 0}</h4>
+                  <p>Upcoming Digital</p>
                 </div>
                 <div className="stat-card">
-                  <h4>{tomorrowAppointments.physicalCount}</h4>
+                  <h4>{(searchedAppointments || tomorrowAppointments || {}).physicalCount || 0}</h4>
                   <p>Physical Appointments</p>
                 </div>
               </div>
               
-              {tomorrowAppointments.appointments && tomorrowAppointments.appointments.length > 0 ? (
+              {((searchedAppointments || tomorrowAppointments || {}).appointments && 
+                (searchedAppointments || tomorrowAppointments || {}).appointments.length > 0) ? (
                 <div className="appointments-list">
                   <h4>Appointment Details:</h4>
                   <div className="appointments-grid">
-                    {tomorrowAppointments.appointments.map((appointment, index) => (
+                    {(searchedAppointments || tomorrowAppointments || {}).appointments.map((appointment, index) => (
                       <div key={appointment._id || index} className="appointment-card">
+                        <div className="appointment-date">{appointment.date}</div>
                         <div className="appointment-time">{appointment.time}</div>
                         <div className="appointment-patient">{appointment.patientName}</div>
+                        <div className="appointment-doctor">Dr. {appointment.doctorName}</div>
                         <div className="appointment-mode">
                           <span className={`mode-badge ${appointment.appointmentMode}`}>
                             {appointment.appointmentMode === 'digital' ? 'Digital' : 'Physical'}
                           </span>
                         </div>
                         <div className="consultation-controls">
-                          {appointment.appointmentMode === 'digital' && appointment.consultationLink && (
+                          {appointment.appointmentMode === 'digital' && appointment.consultationLink && typeof appointment.consultationLink === 'string' && appointment.consultationLink.trim() !== '' && (
                             <span className="consultation-status">✓ Meeting Link Set</span>
                           )}
                           {appointment.appointmentMode === 'digital' && appointment.consultationSummaryPdf && (
@@ -358,31 +478,45 @@ const AdminAvailability = () => {
                           {appointment.appointmentMode === 'digital' ? (
                             <button 
                               className="manage-consultation-btn" 
-                              onClick={() => openConsultationModal(appointment)}
+                              onClick={() => {
+                                console.log('Manage consultation button clicked for appointment:', appointment);
+                                openConsultationModal(appointment);
+                              }}
                             >
-                              Manage Meeting Link
+                              {appointment.consultationLink && typeof appointment.consultationLink === 'string' && appointment.consultationLink.trim() !== '' ? 'Update Meeting Link' : 'Set Meeting Link'}
                             </button>
                           ) : (
                             <span className="physical-appointment-note">Physical appointment - No meeting link needed</span>
                           )}
                         </div>
+
                       </div>
                     ))}
                   </div>
                 </div>
               ) : (
                 <div className="no-appointments">
-                  <p>No appointments scheduled for tomorrow</p>
+                  <p>No Digital appointments found</p>
                 </div>
               )}
+
             </>
           ) : (
-            <div className="error-message">Failed to load appointment data</div>
+            <div className="no-appointments">
+              <p>Click "Show All Upcoming" to load appointments</p>
+            </div>
           )}
           
           <button 
             className="btn btn-primary refresh-btn"
-            onClick={loadTomorrowAppointments}
+            onClick={() => {
+              console.log('Refresh button clicked', { searchedAppointments, tomorrowAppointments });
+              if (searchedAppointments) {
+                searchAppointmentsByDate(searchDate);
+              } else {
+                loadTomorrowAppointments();
+              }
+            }}
             disabled={appointmentsLoading}
           >
             {appointmentsLoading ? 'Refreshing...' : 'Refresh Appointments'}
@@ -399,7 +533,7 @@ const AdminAvailability = () => {
       {showConsultationModal && selectedAppointment && selectedAppointment.appointmentMode === 'digital' && (
         <div className="modal-overlay">
           <div className="modal-content consultation-modal">
-            <h3>Manage Meeting Link</h3>
+            <h3>{selectedAppointment.consultationLink && typeof selectedAppointment.consultationLink === 'string' && selectedAppointment.consultationLink.trim() !== '' ? 'Update Meeting Link' : 'Set Meeting Link'}</h3>
             <p>Appointment: {selectedAppointment.date} at {selectedAppointment.time}</p>
             <p>Patient: {selectedAppointment.patientName}</p>
             <p>Mode: Digital (Online Consultation)</p>
@@ -410,17 +544,24 @@ const AdminAvailability = () => {
                 <input
                   type="url"
                   value={consultationLink}
-                  onChange={(e) => setConsultationLink(e.target.value)}
+                  onChange={(e) => {
+                    console.log('Consultation link input changed:', e.target.value);
+                    setConsultationLink(e.target.value);
+                  }}
                   placeholder="https://zoom.us/j/123456789 or https://meet.google.com/abc-defg-hij"
                   className="consultation-input"
                 />
                 <button 
-                  onClick={updateConsultationLink} 
+                  onClick={() => {
+                    console.log('Update link button clicked', { consultationLink, trimmed: consultationLink.trim() });
+                    updateConsultationLink();
+                  }} 
                   className="update-link-btn"
                   disabled={!consultationLink.trim()}
                 >
-                  Update Meeting Link
+                  {selectedAppointment.consultationLink && typeof selectedAppointment.consultationLink === 'string' && selectedAppointment.consultationLink.trim() !== '' ? 'Update Meeting Link' : 'Set Meeting Link'}
                 </button>
+
               </div>
               
               {selectedAppointment.consultationSummaryPdf && (
@@ -458,7 +599,7 @@ const AdminAvailability = () => {
             <div className="consultation-form">
               <div className="info-section">
                 <p style={{color: '#6c757d', fontSize: '14px'}}>
-                  ℹ️ This is a physical appointment that takes place in-person. No digital consultation link is needed.
+                  ℹ️ This is a physical appointment. No consultation link is needed.
                 </p>
               </div>
             </div>
@@ -606,7 +747,7 @@ const AdminAvailability = () => {
               {!bulkMode && (
                 <div className="add-time-form">
                   <div className="form-group">
-                    <label className="form-label">Add Custom Time Slot</label>
+                    <label className="form-label">Add Time Slot</label>
                     <select
                       className="form-select time-input"
                       value={newTime}

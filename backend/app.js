@@ -29,7 +29,7 @@ app.use("/api/doctor", doctorNotificationRoutes);
 
 // Use MongoDB URI from environment or fallback to existing connection
 const mongoURI = process.env.MONGODB_URI || "mongodb+srv://admin:tpItdFODG5vta5DH@cluster0.pqna85x.mongodb.net/ayumanthra";
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 // Error handling for MongoDB connection
 mongoose.connection.on('error', err => {

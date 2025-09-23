@@ -382,3 +382,31 @@ export const getReminderStatus = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// GET all upcoming digital appointments
+export const getUpcomingDigitalAppointments = async (req, res) => {
+  try {
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+    
+    // Find all appointments from today onwards that are digital and booked
+    const appointments = await Appointment.find({
+      date: { $gte: todayStr },
+      status: "booked",
+      appointmentMode: "digital"
+    }).select('_id patientName date time reminderSent consultationLink consultationSummaryPdf consultationSummaryFilename appointmentMode doctorName doctorId')
+    .sort({ date: 1, time: 1 });
+    
+    console.log('Found upcoming digital appointments:', appointments.length);
+    
+    const stats = {
+      totalAppointments: appointments.length,
+      appointments: appointments
+    };
+    
+    res.status(200).json(stats);
+  } catch (err) {
+    console.error('Error getting upcoming digital appointments:', err);
+    res.status(500).json({ message: "Server error" });
+  }
+};

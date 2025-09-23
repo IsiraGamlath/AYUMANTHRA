@@ -17,7 +17,7 @@ const DoctorAppointments = ({ doctorId }) => {
         return;
       }
 
-      const url = `http://localhost:3000/api/appointment?doctorId=${doctorId}`;
+      const url = `http://localhost:5000/api/appointment?doctorId=${doctorId}`;
       
       // Add timestamp to prevent caching
       const timestamp = new Date().getTime();
@@ -48,7 +48,7 @@ const DoctorAppointments = ({ doctorId }) => {
   const downloadConsultationPdf = async (appointmentId, filename) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/appointment/${appointmentId}/download-pdf`,
+        `http://localhost:5000/api/appointment/${appointmentId}/download-pdf`,
         { responseType: 'blob' }
       );
       
@@ -100,7 +100,7 @@ const DoctorAppointments = ({ doctorId }) => {
 
     try {
       await axios.post(
-        `http://localhost:3000/api/appointment/${selectedAppointmentForUpload._id}/upload-pdf`,
+        `http://localhost:5000/api/appointment/${selectedAppointmentForUpload._id}/upload-pdf`,
         formData,
         {
           headers: {
@@ -125,7 +125,7 @@ const DoctorAppointments = ({ doctorId }) => {
     }
 
     try {
-      await axios.delete(`http://localhost:3000/api/appointment/${appointmentId}/remove-pdf`);
+      await axios.delete(`http://localhost:5000/api/appointment/${appointmentId}/remove-pdf`);
       alert('Consultation summary PDF removed successfully!');
       fetchAppointments();
     } catch (err) {

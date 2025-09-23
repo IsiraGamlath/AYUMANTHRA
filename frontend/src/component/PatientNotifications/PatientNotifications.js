@@ -19,7 +19,7 @@ const PatientNotifications = ({ patientId }) => {
   const fetchNotifications = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`http://localhost:3000/api/patient/notifications?patientId=${patientId}`);
+      const { data } = await axios.get(`http://localhost:5000/api/patient/notifications?patientId=${patientId}`);
       setNotifications(data.notifications || []);
       setUnreadCount(data.unreadCount || 0);
     } catch (error) {
@@ -31,7 +31,7 @@ const PatientNotifications = ({ patientId }) => {
 
   const markAsRead = async (notificationId) => {
     try {
-      await axios.put(`http://localhost:3000/api/patient/notifications/${notificationId}/read`);
+      await axios.put(`http://localhost:5000/api/patient/notifications/${notificationId}/read`);
       fetchNotifications(); // Refresh to update read status
     } catch (error) {
       console.error('Error marking notification as read:', error);
@@ -40,7 +40,7 @@ const PatientNotifications = ({ patientId }) => {
 
   const markAllAsRead = async () => {
     try {
-      await axios.put(`http://localhost:3000/api/patient/notifications/mark-all-read?patientId=${patientId}`);
+      await axios.put(`http://localhost:5000/api/patient/notifications/mark-all-read?patientId=${patientId}`);
       fetchNotifications();
     } catch (error) {
       console.error('Error marking all as read:', error);

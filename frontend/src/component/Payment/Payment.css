@@ -135,7 +135,7 @@
 }
 
 .appointment-summary > div:last-child::before {
-  content: '💰';
+  
   position: absolute;
   left: -2.5rem;
   top: 50%;

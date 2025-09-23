@@ -6,6 +6,7 @@ import Appointment from "../model/appointmentModel.js";
 import Availability from "../model/availabilityModel.js";
 import { triggerReminders } from "../services/reminderService.js";
 import { sendBookingConfirmation, sendCancellationNotification, sendRescheduleNotification } from "../services/autoNotificationService.js";
+import { getUpcomingDigitalAppointments } from "../controllers/availabilityController.js";
 
 const router = express.Router();
 
@@ -300,7 +301,7 @@ router.get("/reminder-status", async (req, res) => {
     const appointments = await Appointment.find({
       date: tomorrowStr,
       status: "booked"
-    }).select('patientName date time reminderSent consultationLink consultationSummaryPdf consultationSummaryFilename appointmentMode');
+    }).select('_id patientName date time reminderSent consultationLink consultationSummaryPdf consultationSummaryFilename appointmentMode');
     
     console.log('Found appointments:', appointments.length);
     console.log('Sample appointment fields:', appointments.length > 0 ? Object.keys(appointments[0].toObject()) : 'No appointments');
@@ -319,6 +320,40 @@ router.get("/reminder-status", async (req, res) => {
   }
 });
 
+// GET all upcoming digital appointments
+router.get("/upcoming-digital", getUpcomingDigitalAppointments);
+
+// GET digital appointments for a specific date
+router.get("/digital-by-date", async (req, res) => {
+  try {
+    const { date } = req.query;
+    
+    if (!date) {
+      return res.status(400).json({ message: "Date parameter is required" });
+    }
+
+    // Find all digital appointments for the specified date that are booked
+    const appointments = await Appointment.find({
+      date: date,
+      status: "booked",
+      appointmentMode: "digital"
+    }).select('_id patientName date time reminderSent consultationLink consultationSummaryPdf consultationSummaryFilename appointmentMode doctorName doctorId')
+    .sort({ time: 1 });
+    
+    console.log('Found digital appointments for date:', date, appointments.length);
+    
+    const stats = {
+      totalAppointments: appointments.length,
+      appointments: appointments
+    };
+    
+    res.status(200).json(stats);
+  } catch (err) {
+    console.error('Error getting digital appointments by date:', err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // PUT update consultation link
 router.put("/:id/consultation-link", async (req, res) => {
   try {
@@ -326,13 +361,41 @@ router.put("/:id/consultation-link", async (req, res) => {
     const appointment = await Appointment.findById(req.params.id);
     if (!appointment) return res.status(404).json({ message: "Appointment not found" });
 
+    // Check if appointment is in the past
+    try {
+      const appointmentDate = new Date(appointment.date);
+      const [timeStr, period] = appointment.time.split(' ');
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      
+      let hour24 = hours;
+      if (period === 'PM' && hours !== 12) {
+        hour24 = hours + 12;
+      } else if (period === 'AM' && hours === 12) {
+        hour24 = 0;
+      }
+      
+      appointmentDate.setHours(hour24, minutes, 0, 0);
+      const isPastAppointment = appointmentDate <= new Date();
+      
+      if (isPastAppointment) {
+        return res.status(400).json({ message: "Cannot update consultation link for past appointments" });
+      }
+    } catch (error) {
+      console.error('Error parsing appointment date/time:', error);
+      // If there's an error parsing, we'll allow the update to maintain backward compatibility
+    }
+
     appointment.consultationLink = consultationLink;
     await appointment.save();
     
-    res.status(200).json({ message: "Consultation link updated", appointment });
+    // Select the same fields as other appointment endpoints for consistency
+    const updatedAppointment = await Appointment.findById(appointment._id)
+      .select('_id patientName date time reminderSent consultationLink consultationSummaryPdf consultationSummaryFilename appointmentMode doctorName doctorId');
+    
+    res.status(200).json({ message: "Consultation link updated", appointment: updatedAppointment });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error('Error updating consultation link:', err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 

@@ -41,7 +41,7 @@ const PaymentForm = () => {
     setTimeout(async () => {
       try {
         console.log('Sending appointment with mode:', appointmentMode);
-        const { data } = await axios.post("http://localhost:3000/api/appointment", {
+        const { data } = await axios.post("http://localhost:5000/api/appointment", {
           doctorId,
           patientId,
           patientName,

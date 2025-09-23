@@ -16,7 +16,7 @@ const MyAppointments = ({ patientId, userRole = 'patient' }) => {
   // Fetch appointments based on user role
   const fetchAppointments = useCallback(async () => {
     try {
-      let url = 'http://localhost:3000/api/appointment';
+      let url = 'http://localhost:5000/api/appointment';
       if (userRole === 'patient' && patientId) {
         url += `?patientId=${patientId}`;
       }
@@ -48,7 +48,7 @@ const MyAppointments = ({ patientId, userRole = 'patient' }) => {
     const confirmRefund = window.confirm("Cancel appointment? A full refund will be issued.");
     if (!confirmRefund) return;
     try {
-      await axios.put(`http://localhost:3000/api/appointment/${id}/cancel`);
+      await axios.put(`http://localhost:5000/api/appointment/${id}/cancel`);
       alert("Appointment cancelled. Refund processed.");
       fetchAppointments();
     } catch (err) {
@@ -72,7 +72,7 @@ const MyAppointments = ({ patientId, userRole = 'patient' }) => {
     });
 
     try {
-      const { data } = await axios.get(`http://localhost:3000/api/availability/week?doctorId=${appointment.doctorId}&startDate=${appointment.date}`);
+      const { data } = await axios.get(`http://localhost:5000/api/availability/week?doctorId=${appointment.doctorId}&startDate=${appointment.date}`);
       setAvailableDates(data);
       const dayAvailability = data.find(day => day.date === appointment.date);
       setAvailableSlots(dayAvailability?.slots || []);
@@ -86,7 +86,7 @@ const MyAppointments = ({ patientId, userRole = 'patient' }) => {
     setSelectedRescheduleDate(newDate);
     setSelectedRescheduleTime("");
     try {
-      const { data } = await axios.get(`http://localhost:3000/api/availability/week?doctorId=${rescheduleAppointment.doctorId}&startDate=${newDate}`);
+      const { data } = await axios.get(`http://localhost:5000/api/availability/week?doctorId=${rescheduleAppointment.doctorId}&startDate=${newDate}`);
       const dayAvailability = data.find(day => day.date === newDate);
       setAvailableSlots(dayAvailability?.slots || []);
     } catch {
@@ -102,7 +102,7 @@ const MyAppointments = ({ patientId, userRole = 'patient' }) => {
     }
     try {
       await axios.put(
-        `http://localhost:3000/api/appointment/${rescheduleAppointment._id}/reschedule`,
+        `http://localhost:5000/api/appointment/${rescheduleAppointment._id}/reschedule`,
         { date: selectedRescheduleDate, time: selectedRescheduleTime }
       );
       alert("Appointment rescheduled successfully!");
@@ -134,7 +134,7 @@ const MyAppointments = ({ patientId, userRole = 'patient' }) => {
   const downloadConsultationPdf = async (appointmentId, filename) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/appointment/${appointmentId}/download-pdf`,
+        `http://localhost:5000/api/appointment/${appointmentId}/download-pdf`,
         { responseType: 'blob' }
       );
       
