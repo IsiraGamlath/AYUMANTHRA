@@ -1,84 +1,113 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./Nav.css";
 import { BiHome, BiLogOut, BiUser } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
 import { RiAdminFill } from "react-icons/ri";
-import profilePic from "../images/logo.png";
+import profilePic from "../images/logo.png"; // replace with actual logo/image path
 
-const Sidebar = ({ onProfileClick }) => {
+const Sidebar = () => {
   const navigate = useNavigate();
 
-  // ✅ Logout handler
   const handleLogout = () => {
-    // Remove token if you stored it in localStorage
     localStorage.removeItem("authToken");
     alert("You have been logged out.");
-    navigate("/LoginH"); // ✅ Go back to login page
+    navigate("/LoginH");
   };
 
   return (
-    <div className="sidebar">
-      <h2 className="logo">Ayu Mantra</h2>
+    <div className="fixed left-0 top-0 h-screen w-64 bg-gray-900 text-white flex flex-col justify-between shadow-lg p-5 transition-all">
+      {/* Logo */}
+      <h2 className="text-center text-2xl font-bold text-green-500 mb-8 tracking-wide">
+        Ayu Mantra
+      </h2>
 
       {/* Profile Section */}
-      <div className="profile-section">
-        <img src={profilePic} alt="Profile" className="profile-pic" />
-        <p className="profile-name">Admin</p>
+      <div className="text-center mb-8">
+        <img
+          src={profilePic}
+          alt="Profile"
+          className="w-16 h-16 rounded-full object-cover border-2 border-green-500 mx-auto mb-2"
+        />
+        <p className="font-semibold text-gray-200">Admin</p>
       </div>
 
-      <ul className="nav-links">
-        <li>
-          <Link to="/AmainHome">
-            <BiHome className="icon" />
+      {/* Navigation Links */}
+      <ul className="flex-1">
+        <li className="mb-4">
+          <Link
+            to="/AmainHome"
+            className="flex items-center gap-3 p-2 rounded hover:bg-green-500 hover:text-white transition"
+          >
+            <BiHome className="text-lg" />
             Home
           </Link>
         </li>
-        <li>
-          <Link to="/adminHome">
-            <RiAdminFill className="icon" />
+        <li className="mb-4">
+          <Link
+            to="/adminHome"
+            className="flex items-center gap-3 p-2 rounded hover:bg-green-500 hover:text-white transition"
+          >
+            <RiAdminFill className="text-lg" />
             Admin Dashboard
           </Link>
         </li>
-        <li>
-          <Link to="/doctorHome">
-            <FaUsers className="icon" />
+        <li className="mb-4">
+          <Link
+            to="/doctorHome"
+            className="flex items-center gap-3 p-2 rounded hover:bg-green-500 hover:text-white transition"
+          >
+            <FaUsers className="text-lg" />
             Doctor Management
           </Link>
         </li>
-        <li>
-          <Link to="/UserHome">
-            <BiUser className="icon" />
+        <li className="mb-4">
+          <Link
+            to="/UserHome"
+            className="flex items-center gap-3 p-2 rounded hover:bg-green-500 hover:text-white transition"
+          >
+            <BiUser className="text-lg" />
             User Management
           </Link>
         </li>
-        <li>
-          <Link to="/supplierHome">
-            <BiUser className="icon" />
+        <li className="mb-4">
+          <Link
+            to="/supplierHome"
+            className="flex items-center gap-3 p-2 rounded hover:bg-green-500 hover:text-white transition"
+          >
+            <BiUser className="text-lg" />
             Supplier Management
           </Link>
         </li>
-        <li>
-          <Link to="/supplierHome">
-            <BiUser className="icon" />
-            Appoinments
+        <li className="mb-4">
+          <Link
+            to="/appointments"
+            className="flex items-center gap-3 p-2 rounded hover:bg-green-500 hover:text-white transition"
+          >
+            <BiUser className="text-lg" />
+            Appointments
           </Link>
         </li>
-        <li>
-          <Link to="/supplierHome">
-            <BiUser className="icon" />
+        <li className="mb-4">
+          <Link
+            to="/doctorAvailability"
+            className="flex items-center gap-3 p-2 rounded hover:bg-green-500 hover:text-white transition"
+          >
+            <BiUser className="text-lg" />
             Doctor Availability
           </Link>
         </li>
-
-        {/* ✅ Logout with onClick */}
-        <li className="logout">
-          <button onClick={handleLogout} className="logout-btn">
-            <BiLogOut className="icon" />
-            Log Out
-          </button>
-        </li>
       </ul>
+
+      {/* Logout Button */}
+      <div className="mt-4">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 w-full p-2 rounded hover:bg-red-500 hover:text-white transition text-left"
+        >
+          <BiLogOut className="text-lg" />
+          Log Out
+        </button>
+      </div>
     </div>
   );
 };

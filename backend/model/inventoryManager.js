@@ -29,11 +29,6 @@ const inventoryManagerSchema = new Schema({
     required: true,
     unique: true, // ✅ each manager must have unique NIC
   },
-  category: {
-    type: String,
-    enum: ['Pharmacy', 'Surgery', 'General Supplies', 'Equipment'], // ✅ allowed categories
-    required: true,
-  },
   createdAt: {
     type: Date,
     default: Date.now,

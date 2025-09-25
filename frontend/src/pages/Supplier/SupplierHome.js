@@ -1,9 +1,7 @@
-// src/pages/Supplier/SupplierHome.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Supplier from "./Supplier";
 import Nav from '../../components/Nav/Comnav/Nav';
-import './SupplierHome.css';
 import { GrAdd } from 'react-icons/gr';
 import AddSupplier from './AddSupplier';
 import UpdateSupplier from './UpdateSupplier';
@@ -30,7 +28,6 @@ const SupplierHome = () => {
     getSuppliers();
   }, []);
 
-  // Toggle supplier active status
   const toggleActive = async (supplier) => {
     try {
       await axios.put(`${URL}/${supplier._id}`, { active: !supplier.active });
@@ -45,7 +42,6 @@ const SupplierHome = () => {
     }
   };
 
-  // Filter suppliers by search term
   const filteredSuppliers = suppliers.filter(supplier =>
     (supplier.supplierName?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
     (supplier.supplierEmail?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
@@ -53,91 +49,105 @@ const SupplierHome = () => {
   );
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100"style={{ display: 'flex' }}>
       <Nav />
 
-      <h1 className='mh2'>Supplier Details</h1>
-      {successMessage && <div className="success-popup">{successMessage}</div>}
+      <div className="container mx-auto px-4 py-6" style={{ marginLeft: "245px" }}>
+        <h1 className="text-3xl font-bold mb-4 text-gray-800">Supplier Details</h1>
 
-      {/* Search Box */}
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search by name, email, or company..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
+        {successMessage && (
+          <div className="mb-4 p-3 bg-green-100 text-green-800 rounded shadow">{successMessage}</div>
+        )}
+
+        {/* Search Box */}
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search by name, email, or company..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full md:w-1/2 px-4 py-2 border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+
+        {/* Suppliers Table */}
+        <div className="overflow-x-auto bg-white rounded shadow" style={{minWidth
+: '800px'
+        }}>
+          <table className="min-w-full table-auto" style={{ marginRight
+: '0px'
+          }}>
+            <thead className="bg-blue-600 text-white" style={{ minWidth: '800px' }}>
+              <tr>
+                <th className="px-4 py-2 text-left">Name</th>
+                <th className="px-4 py-2 text-left">Phone</th>
+                <th className="px-4 py-2 text-left">Email</th>
+                <th className="px-4 py-2 text-left">Company</th>
+                <th className="px-4 py-2 text-left">Supply Category</th>
+                <th className="px-4 py-2 text-left">Active</th>
+                <th className="px-4 py-2 text-left">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredSuppliers.length > 0 ? (
+                filteredSuppliers.map((supplier, i) => (
+                  <Supplier
+                    key={i}
+                    supplier={supplier}
+                    onUpdate={() => {
+                      setSelectedSupplier(supplier);
+                      setShowUpdatePopup(true);
+                    }}
+                    onToggleActive={() => toggleActive(supplier)}
+                  />
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="7" className="text-center px-4 py-6 text-gray-500">
+                    No suppliers found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Add Supplier Button */}
+        <div className="fixed bottom-6 right-6">
+          <button
+            onClick={() => setShowAddPopup(true)}
+            className="flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition"
+          >
+            <GrAdd className="text-2xl" />
+          </button>
+          <div className="text-center mt-2 text-gray-700">Add Supplier</div>
+        </div>
+
+        {/* Add Supplier Popup */}
+        {showAddPopup && (
+          <AddSupplier
+            onClose={() => setShowAddPopup(false)}
+            onSupplierAdded={() => {
+              getSuppliers();
+              setSuccessMessage('Supplier added successfully!');
+              setTimeout(() => setSuccessMessage(''), 3000);
+            }}
+          />
+        )}
+
+        {/* Update Supplier Popup */}
+        {showUpdatePopup && selectedSupplier && (
+          <UpdateSupplier
+            supplier={selectedSupplier}
+            onClose={() => setShowUpdatePopup(false)}
+            onSupplierUpdated={() => {
+              getSuppliers();
+              setSuccessMessage('Supplier updated successfully!');
+              setTimeout(() => setSuccessMessage(''), 3000);
+            }}
+          />
+        )}
       </div>
-
-      {/* Suppliers Table */}
-      <table id="users">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Company</th>
-            <th>Supply Category</th>
-            <th>Active</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredSuppliers.length > 0 ? (
-            filteredSuppliers.map((supplier, i) => (
-              <Supplier
-                key={i}
-                supplier={supplier}
-                onUpdate={() => {
-                  setSelectedSupplier(supplier);
-                  setShowUpdatePopup(true);
-                }}
-                onToggleActive={() => toggleActive(supplier)}
-              />
-            ))
-          ) : (
-            <tr>
-              <td colSpan="7" style={{ textAlign: "center", padding: "15px" }}>
-                No suppliers found
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-
-      {/* Add Supplier Button */}
-      <div className="float" onClick={() => setShowAddPopup(true)}>
-        <GrAdd className="my-float" />
-      </div>
-      <div className="label-container">
-        <div className="label-text">Add Supplier</div>
-      </div>
-
-      {/* Add Supplier Popup */}
-      {showAddPopup && (
-        <AddSupplier
-          onClose={() => setShowAddPopup(false)}
-          onSupplierAdded={() => {
-            getSuppliers();
-            setSuccessMessage('Supplier added successfully!');
-            setTimeout(() => setSuccessMessage(''), 3000);
-          }}
-        />
-      )}
-
-      {/* Update Supplier Popup */}
-      {showUpdatePopup && selectedSupplier && (
-        <UpdateSupplier
-          supplier={selectedSupplier}
-          onClose={() => setShowUpdatePopup(false)}
-          onSupplierUpdated={() => {
-            getSuppliers();
-            setSuccessMessage('Supplier updated successfully!');
-            setTimeout(() => setSuccessMessage(''), 3000);
-          }}
-        />
-      )}
     </div>
   );
 };

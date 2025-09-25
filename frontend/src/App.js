@@ -19,6 +19,8 @@ import UpdateSupplier from "./pages/Supplier/UpdateSupplier";
 import AddSupplier from "./pages/Supplier/AddSupplier";
 import UserProfile from "./pages/PatientDash/UserProfile";
 
+
+
 function App() {
   return (
     <Routes>

@@ -1,74 +1,92 @@
-// pages/Login/Login.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import AddUser from "../User/AddUser"; // ✅ Import popup
-import "./Login.css";
+import AddUser from "../User/AddUser";
 
 export default function Login() {
   const [userGmail, setUserGmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [errors, setErrors] = useState({});
   const [showRegisterPopup, setShowRegisterPopup] = useState(false);
 
   const navigate = useNavigate();
 
+  // Validation function
+  const validateField = (name, value) => {
+    let error = "";
+
+    if (name === "userGmail") {
+      if (!value.trim()) error = "Email is required.";
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+        error = "Enter a valid email address.";
+    }
+
+    if (name === "userPassword") {
+      if (!value.trim()) error = "Password is required.";
+      else if (value.length < 6)
+        error = "Password must be at least 6 characters long.";
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: error }));
+    return error === "";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
 
-    setErrorMessage(""); // clear previous error
+    // Validate all fields before submit
+    const isEmailValid = validateField("userGmail", userGmail);
+    const isPasswordValid = validateField("userPassword", userPassword);
 
-    // ✅ Admin login
+    if (!isEmailValid || !isPasswordValid) return;
+
+    // Admin login
     if (userGmail === "admin@gmail.com" && userPassword === "admin123") {
       alert("Admin Login Successful!");
       navigate("/adminHome");
       return;
     }
 
-    // ✅ USER LOGIN
+    // User login
     try {
       const userRes = await axios.post("http://localhost:5000/users/login", {
         userGmail,
         userPassword,
       });
-
       if (userRes.status === 200) {
         const user = userRes.data.user;
         localStorage.setItem("userId", user._id);
         localStorage.setItem("userName", user.userName);
         alert(`Welcome ${user.userName}`);
-        navigate("/userprofile"); // ✅ Redirect to User Profile
+        navigate("/userprofile");
         return;
       }
-    } catch (err) {
-      console.log("User login failed, trying next role...");
-    }
+    } catch {}
 
     // Supplier login
-try {
-  const supplierRes = await axios.post("http://localhost:5000/suppliers/login", {
-    supplierEmail: userGmail,
-    supplierPassword: userPassword,
-  });
+    try {
+      const supplierRes = await axios.post(
+        "http://localhost:5000/suppliers/login",
+        { supplierEmail: userGmail, supplierPassword: userPassword }
+      );
+      if (supplierRes.status === 200) {
+        const supplier = supplierRes.data.supplier;
+        localStorage.setItem("supplierId", supplier._id);
+        localStorage.setItem("supplierName", supplier.supplierName);
+        alert(`Welcome ${supplier.supplierName}`);
+        navigate("/supplierprofile");
+        return;
+      }
+    } catch {}
 
-  if (supplierRes.status === 200) {
-    const supplier = supplierRes.data.supplier;
-    localStorage.setItem("supplierId", supplier._id);
-    localStorage.setItem("supplierName", supplier.supplierName);
-    alert(`Welcome ${supplier.supplierName}`);
-    navigate("/supplierprofile"); // redirect to SupplierProfile page
-    return;
-  }
-} catch {}
-
-
-    // ✅ Doctor login
+    // Doctor login
     try {
       const response = await axios.post("http://localhost:5000/doctors/login", {
         doctorEmail: userGmail,
         doctorPassword: userPassword,
       });
-
       if (response.status === 200) {
         const doctor = response.data.doctor;
         localStorage.setItem("doctorId", doctor._id);
@@ -79,16 +97,12 @@ try {
       }
     } catch {}
 
-    // ✅ Inventory Manager login
+    // Inventory Manager login
     try {
       const res = await axios.post(
         "http://localhost:5000/inventory-managers/login",
-        {
-          managerEmail: userGmail,
-          managerPassword: userPassword,
-        }
+        { managerEmail: userGmail, managerPassword: userPassword }
       );
-
       if (res.status === 200) {
         const manager = res.data.manager;
         localStorage.setItem("managerId", manager._id);
@@ -99,16 +113,12 @@ try {
       }
     } catch {}
 
-    // ✅ Project Manager login
+    // Project Manager login
     try {
       const pmRes = await axios.post(
         "http://localhost:5000/project-managers/login",
-        {
-          managerEmail: userGmail,
-          managerPassword: userPassword,
-        }
+        { managerEmail: userGmail, managerPassword: userPassword }
       );
-
       if (pmRes.status === 200) {
         const pm = pmRes.data.manager;
         localStorage.setItem("pmId", pm._id);
@@ -126,80 +136,100 @@ try {
   };
 
   return (
-    <div className="login-page">
-      <div className="left-side">
-        <h1>
+    <div className="flex min-h-screen">
+      {/* Left Side */}
+      <div className="hidden md:flex w-1/2 bg-green-600 text-white items-center justify-center p-10">
+        <h1 className="text-5xl font-bold text-center">
           Welcome to <br /> Ayu Mantra
         </h1>
       </div>
 
-      <div className="right-side">
-        <div className="form-container">
-          <div className="ful">
-            <div className="row">
-              <div className="column">
-                <h2 className="r-h1">Login</h2>
-                <br />
-                <h4 className="r-subheading">
-                  Please log in with your credentials.
-                </h4>
-                <br />
-                <form onSubmit={handleSubmit}>
-                  <label className="fmhd" htmlFor="userGmail">
-                    Email:
-                  </label>
-                  <br />
-                  <input
-                    className="input"
-                    type="email"
-                    id="userGmail"
-                    value={userGmail}
-                    onChange={(e) => setUserGmail(e.target.value)}
-                    required
-                  />
-                  <br />
-                  <br />
+      {/* Right Side */}
+      <div className="flex flex-1 items-center justify-center p-6 bg-gray-100">
+        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">Login</h2>
+          <p className="text-gray-600 mb-6">
+            Please log in with your credentials.
+          </p>
 
-                  <label className="fmhd" htmlFor="userPassword">
-                    Password:
-                  </label>
-                  <br />
-                  <input
-                    className="input"
-                    type="password"
-                    id="userPassword"
-                    value={userPassword}
-                    onChange={(e) => setUserPassword(e.target.value)}
-                    required
-                  />
-                  <br />
-                  <br />
-
-                  <div className="rgbtn">
-                    <button type="submit" className="regbtn">
-                      Login
-                    </button>
-                  </div>
-                </form>
-                <br />
-                {errorMessage && <p className="error">{errorMessage}</p>}
-                <p>
-                  Don&apos;t have an account?{" "}
-                  <button
-                    className="link-button"
-                    onClick={() => setShowRegisterPopup(true)}
-                  >
-                    Register
-                  </button>{" "}
-                  now
-                </p>
-              </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email Field */}
+            <div>
+              <label
+                htmlFor="userGmail"
+                className="block text-gray-700 font-medium mb-1"
+              >
+                Email:
+              </label>
+              <input
+                type="email"
+                id="userGmail"
+                value={userGmail}
+                onChange={(e) => {
+                  setUserGmail(e.target.value);
+                  validateField("userGmail", e.target.value);
+                }}
+                className={`w-full px-3 py-2 border ${
+                  errors.userGmail ? "border-red-500" : "border-gray-300"
+                } rounded focus:outline-none focus:ring-2 focus:ring-green-500`}
+              />
+              {errors.userGmail && (
+                <p className="text-red-600 text-xs mt-1">{errors.userGmail}</p>
+              )}
             </div>
-          </div>
+
+            {/* Password Field */}
+            <div>
+              <label
+                htmlFor="userPassword"
+                className="block text-gray-700 font-medium mb-1"
+              >
+                Password:
+              </label>
+              <input
+                type="password"
+                id="userPassword"
+                value={userPassword}
+                onChange={(e) => {
+                  setUserPassword(e.target.value);
+                  validateField("userPassword", e.target.value);
+                }}
+                className={`w-full px-3 py-2 border ${
+                  errors.userPassword ? "border-red-500" : "border-gray-300"
+                } rounded focus:outline-none focus:ring-2 focus:ring-green-500`}
+              />
+              {errors.userPassword && (
+                <p className="text-red-600 text-xs mt-1">
+                  {errors.userPassword}
+                </p>
+              )}
+            </div>
+
+            {errorMessage && (
+              <p className="text-red-600 text-sm">{errorMessage}</p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded shadow transition duration-200"
+            >
+              Login
+            </button>
+          </form>
+
+          <p className="mt-4 text-gray-700 text-sm text-center">
+            Don't have an account?{" "}
+            <button
+              onClick={() => setShowRegisterPopup(true)}
+              className="text-green-600 hover:text-green-700 font-medium"
+            >
+              Register
+            </button>
+          </p>
         </div>
       </div>
 
-      {/* ✅ Show AddUser Popup */}
+      {/* Register Popup */}
       {showRegisterPopup && (
         <AddUser
           onClose={() => setShowRegisterPopup(false)}

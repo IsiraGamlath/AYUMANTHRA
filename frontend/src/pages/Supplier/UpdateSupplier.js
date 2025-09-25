@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./SaddUser.css"; // reuse the same CSS
 
 const UpdateSupplier = ({ supplier, onClose, onSupplierUpdated }) => {
   const [inputs, setInputs] = useState({});
@@ -14,7 +13,6 @@ const UpdateSupplier = ({ supplier, onClose, onSupplierUpdated }) => {
     "Herbal Products",
     "Food & Beverages",
     "Supplements",
-    "Medicines",
     "Household Products",
   ];
 
@@ -45,96 +43,125 @@ const UpdateSupplier = ({ supplier, onClose, onSupplierUpdated }) => {
   };
 
   return (
-    <div className="popup-overlay">
-      <div className="popup">
-        <h3>Update Supplier</h3>
-        <form onSubmit={handleSubmit}>
-          <label>Name:</label>
-          <input
-            type="text"
-            name="supplierName"
-            value={inputs.supplierName || ""}
-            onChange={handleChange}
-            required
-          />
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white w-full max-w-lg rounded-lg shadow-lg p-6 relative">
+        <h3 className="text-xl font-bold mb-4 text-gray-800">Update Supplier</h3>
+        <form onSubmit={handleSubmit} className="space-y-3 text-gray-700">
+          <div>
+            <label className="block mb-1 font-medium">Name:</label>
+            <input
+              type="text"
+              name="supplierName"
+              value={inputs.supplierName || ""}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-          <label>Phone:</label>
-          <input
-            type="text"
-            name="supplierPhone"
-            value={inputs.supplierPhone || ""}
-            onChange={handleChange}
-            required
-          />
+          <div>
+            <label className="block mb-1 font-medium">Phone:</label>
+            <input
+              type="text"
+              name="supplierPhone"
+              value={inputs.supplierPhone || ""}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-          <label>Email:</label>
-          <input
-            type="email"
-            name="supplierEmail"
-            value={inputs.supplierEmail || ""}
-            onChange={handleChange}
-            required
-          />
+          <div>
+            <label className="block mb-1 font-medium">Email:</label>
+            <input
+              type="email"
+              name="supplierEmail"
+              value={inputs.supplierEmail || ""}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-          <label>Password:</label>
-          <input
-            type="password"
-            name="supplierPassword"
-            value={inputs.supplierPassword || ""}
-            onChange={handleChange}
-            required
-          />
+          <div>
+            <label className="block mb-1 font-medium">Password:</label>
+            <input
+              type="password"
+              name="supplierPassword"
+              value={inputs.supplierPassword || ""}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-          <label>Company Name:</label>
-          <input
-            type="text"
-            name="companyName"
-            value={inputs.companyName || ""}
-            onChange={handleChange}
-            required
-          />
+          <div>
+            <label className="block mb-1 font-medium">Company Name:</label>
+            <input
+              type="text"
+              name="companyName"
+              value={inputs.companyName || ""}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-          <label>Address:</label>
-          <input
-            type="text"
-            name="address"
-            value={inputs.address || ""}
-            onChange={handleChange}
-            required
-          />
+          <div>
+            <label className="block mb-1 font-medium">Address:</label>
+            <input
+              type="text"
+              name="address"
+              value={inputs.address || ""}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-          <label>Supply Category:</label>
-          <select
-            name="supplyCategory"
-            value={inputs.supplyCategory || "Electronics"}
-            onChange={handleChange}
-            required
-          >
-            {categories.map((cat, i) => (
-              <option key={i} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+          <div>
+            <label className="block mb-1 font-medium">Supply Category:</label>
+            <select
+              name="supplyCategory"
+              value={inputs.supplyCategory || categories[0]}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              {categories.map((cat, i) => (
+                <option key={i} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <label>Active:</label>
-          <input
-            type="checkbox"
-            name="active"
-            checked={inputs.active || false}
-            onChange={handleCheckbox}
-          />
-          <br />
-          <br />
+          <div className="flex items-center space-x-2">
+            <label className="font-medium">Active:</label>
+            <input
+              type="checkbox"
+              name="active"
+              checked={inputs.active || false}
+              onChange={handleCheckbox}
+              className="w-5 h-5"
+            />
+          </div>
 
-          <button type="submit">Update Supplier</button>
-          <button
-            type="button"
-            onClick={onClose}
-            style={{ marginLeft: "10px" }}
-          >
-            Cancel
-          </button>
+          <div className="flex justify-end space-x-3 mt-4">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            >
+              Update Supplier
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500 transition"
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
     </div>

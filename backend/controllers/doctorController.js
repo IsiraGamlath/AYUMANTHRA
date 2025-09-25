@@ -20,7 +20,8 @@ const addDoctor = async (req, res) => {
     doctorPassword,
     specialization,
     experienceYears,
-    available
+    available,
+    mode
   } = req.body;
 
   try {
@@ -42,6 +43,7 @@ const addDoctor = async (req, res) => {
       specialization,
       experienceYears,
       available,
+      mode, // ✅ Include mode
     });
 
     await doctor.save();
@@ -80,7 +82,8 @@ const updateDoctor = async (req, res) => {
     doctorPassword,
     specialization,
     experienceYears,
-    available
+    available,
+    mode
   } = req.body;
 
   try {
@@ -107,6 +110,7 @@ const updateDoctor = async (req, res) => {
         specialization,
         experienceYears,
         available,
+        mode, // ✅ Include mode
       },
       { new: true }
     );

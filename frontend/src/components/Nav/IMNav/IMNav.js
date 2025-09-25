@@ -1,9 +1,8 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BiHome, BiLogOut } from "react-icons/bi";
-import { FaUserTie } from "react-icons/fa"; // icon for profile
-import profilePic from "../images/logo.png"; // replace with actual logo/image path
-import "./IMNav.css"; // new CSS file for inventory manager nav
+import { FaUserTie } from "react-icons/fa";
+import profilePic from "../images/logo.png"; // replace with actual path
 
 const IMNav = () => {
   const navigate = useNavigate();
@@ -18,35 +17,54 @@ const IMNav = () => {
   };
 
   return (
-    <div className="im-sidebar">
+    <div className="w-64 min-h-screen bg-green-600 text-white flex flex-col">
       {/* Logo */}
-      <h2 className="im-logo">Ayu Mantra</h2>
+      <div className="text-center py-6 border-b border-green-500">
+        <h2 className="text-2xl font-bold tracking-wide">Ayu Mantra</h2>
+      </div>
 
       {/* Profile Section */}
-      <div className="im-profile-section">
-        <img src={profilePic} alt="Profile" className="im-profile-pic" />
-        <p className="im-profile-name">{managerName || "Manager"}</p>
+      <div className="flex flex-col items-center py-6 border-b border-green-500">
+        <img
+          src={profilePic}
+          alt="Profile"
+          className="w-20 h-20 rounded-full border-2 border-white mb-2"
+        />
+        <p className="text-lg font-semibold">{managerName || "Manager"}</p>
       </div>
 
       {/* Navigation Links */}
-      <ul className="im-nav-links">
+      <ul className="flex-1 px-4 py-6 space-y-3">
         <li>
-          <Link to="/imHome" className="im-nav-link">
-            <BiHome className="icon" /> Home
+          <Link
+            to="/imHome"
+            className="flex items-center gap-3 px-3 py-2 rounded hover:bg-green-500 transition"
+          >
+            <BiHome className="text-xl" />
+            Home
           </Link>
         </li>
 
         {managerId && (
           <li>
-            <Link to={`/imProfile/${managerId}`} className="im-nav-link">
-              <FaUserTie className="icon" /> Profile
+            <Link
+              to={`/imProfile/${managerId}`}
+              className="flex items-center gap-3 px-3 py-2 rounded hover:bg-green-500 transition"
+            >
+              <FaUserTie className="text-xl" />
+              Profile
             </Link>
           </li>
         )}
 
+        {/* Logout Button */}
         <li>
-          <button onClick={handleLogout} className="im-logout-btn">
-            <BiLogOut className="icon" /> Logout
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 w-full px-3 py-2 bg-red-500 rounded hover:bg-red-600 transition"
+          >
+            <BiLogOut className="text-xl" />
+            Logout
           </button>
         </li>
       </ul>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./AdminProfile.css";
 
 const AdminProfile = () => {
   const [admin, setAdmin] = useState(null);
@@ -14,8 +13,8 @@ const AdminProfile = () => {
     adminEmail: "",
   });
 
-  // Fetch admin profile (use actual logged-in admin ID here)
-  const adminId = "68b3cdade4f6ffc24a40a9e8"; // 👉 replace with real admin id (or from auth)
+  // Replace with real admin id (from auth)
+  const adminId = "68b3cdade4f6ffc24a40a9e8";
 
   useEffect(() => {
     const fetchAdmin = async () => {
@@ -57,73 +56,125 @@ const AdminProfile = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return <p className="text-gray-500 text-center text-lg mt-10">Loading...</p>;
 
   return (
-    <div className="admin-profile">
-      <h2>Admin Profile</h2>
+    <div className="max-w-md mx-auto p-6">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        Admin Profile
+      </h2>
 
       {!editing ? (
-        <div className="profile-view">
-          <p><strong>First Name:</strong> {admin.firstName}</p>
-          <p><strong>Last Name:</strong> {admin.lastName}</p>
-          <p><strong>NIC:</strong> {admin.nic}</p>
-          <p><strong>Phone:</strong> {admin.adminPhone}</p>
-          <p><strong>Email:</strong> {admin.adminEmail}</p>
+        <div className="space-y-3">
+          <p>
+            <span className="font-semibold text-gray-700">First Name:</span>{" "}
+            {admin.firstName}
+          </p>
+          <p>
+            <span className="font-semibold text-gray-700">Last Name:</span>{" "}
+            {admin.lastName}
+          </p>
+          <p>
+            <span className="font-semibold text-gray-700">NIC:</span> {admin.nic}
+          </p>
+          <p>
+            <span className="font-semibold text-gray-700">Phone:</span>{" "}
+            {admin.adminPhone}
+          </p>
+          <p>
+            <span className="font-semibold text-gray-700">Email:</span>{" "}
+            {admin.adminEmail}
+          </p>
 
-          <button onClick={() => setEditing(true)}>Edit Profile</button>
+          <button
+            onClick={() => setEditing(true)}
+            className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow w-full"
+          >
+            Edit Profile
+          </button>
         </div>
       ) : (
-        <form onSubmit={handleUpdate} className="profile-edit-form">
-          <label>First Name:</label>
-          <input
-            type="text"
-            name="firstName"
-            value={form.firstName}
-            onChange={handleChange}
-            required
-          />
+        <form onSubmit={handleUpdate} className="space-y-4 flex flex-col">
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">
+              First Name:
+            </label>
+            <input
+              type="text"
+              name="firstName"
+              value={form.firstName}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-          <label>Last Name:</label>
-          <input
-            type="text"
-            name="lastName"
-            value={form.lastName}
-            onChange={handleChange}
-            required
-          />
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">
+              Last Name:
+            </label>
+            <input
+              type="text"
+              name="lastName"
+              value={form.lastName}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-          <label>NIC:</label>
-          <input
-            type="text"
-            name="nic"
-            value={form.nic}
-            onChange={handleChange}
-            required
-          />
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">NIC:</label>
+            <input
+              type="text"
+              name="nic"
+              value={form.nic}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-          <label>Phone:</label>
-          <input
-            type="text"
-            name="adminPhone"
-            value={form.adminPhone}
-            onChange={handleChange}
-            required
-          />
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Phone:</label>
+            <input
+              type="text"
+              name="adminPhone"
+              value={form.adminPhone}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-          <label>Email:</label>
-          <input
-            type="email"
-            name="adminEmail"
-            value={form.adminEmail}
-            onChange={handleChange}
-            required
-          />
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Email:</label>
+            <input
+              type="email"
+              name="adminEmail"
+              value={form.adminEmail}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-          <button type="submit">Save Changes</button>
-          <button type="button" onClick={() => setEditing(false)}>
-            Cancel
-          </button>
+          <div className="flex gap-4">
+            <button
+              type="submit"
+              className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded shadow"
+            >
+              Save Changes
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditing(false)}
+              className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded shadow"
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       )}
     </div>

@@ -3,14 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { BiHome, BiLogOut } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
 import profilePic from "../images/logo.png"; // replace with your actual logo/image path
-import "./DNav.css"; // make sure this CSS file exists
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const doctorId = localStorage.getItem("doctorId");
   const doctorName = localStorage.getItem("doctorName");
 
-  // ✅ Logout function
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("doctorId");
@@ -20,40 +18,57 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar">
+    <div className="fixed left-0 top-0 h-screen w-64 bg-gray-900 text-white flex flex-col justify-between shadow-lg p-5 transition-all">
       {/* Logo */}
-      <h2 className="logo">Ayu Mantra</h2>
+      <h2 className="text-center text-2xl font-bold text-green-500 mb-8 tracking-wide">
+        Ayu Mantra
+      </h2>
 
       {/* Profile Section */}
-      <div className="profile-section">
-        <img src={profilePic} alt="Profile" className="profile-pic" />
-        <p className="profile-name">{doctorName || "Admin"}</p>
+      <div className="text-center mb-8">
+        <img
+          src={profilePic}
+          alt="Profile"
+          className="w-16 h-16 rounded-full object-cover border-2 border-green-500 mx-auto mb-2"
+        />
+        <p className="font-semibold text-gray-200">{doctorName || "Doctor"}</p>
       </div>
 
       {/* Navigation Links */}
-      <ul className="nav-links">
-        <li>
-          <Link to="/AmainHome" className="nav-link">
-            <BiHome className="icon" /> Home
+      <ul className="flex-1">
+        <li className="mb-4">
+          <Link
+            to="/AmainHome"
+            className="flex items-center gap-3 p-2 rounded hover:bg-green-500 hover:text-white transition"
+          >
+            <BiHome className="text-lg" />
+            Home
           </Link>
         </li>
 
-        {/* Doctor Profile link only if logged in */}
         {doctorId && (
-          <li>
-            <Link to={`/doctorprofile/${doctorId}`} className="nav-link">
-              <FaUsers className="icon" /> Doctor Profile
+          <li className="mb-4">
+            <Link
+              to={`/doctorprofile/${doctorId}`}
+              className="flex items-center gap-3 p-2 rounded hover:bg-green-500 hover:text-white transition"
+            >
+              <FaUsers className="text-lg" />
+              Doctor Profile
             </Link>
           </li>
         )}
-
-        {/* Logout Button */}
-        <li>
-          <button onClick={handleLogout} className="logout-btn">
-            <BiLogOut className="icon" /> Log Out
-          </button>
-        </li>
       </ul>
+
+      {/* Logout Button */}
+      <div className="mt-4">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 w-full p-2 rounded hover:bg-red-500 hover:text-white transition text-left"
+        >
+          <BiLogOut className="text-lg" />
+          Log Out
+        </button>
+      </div>
     </div>
   );
 };

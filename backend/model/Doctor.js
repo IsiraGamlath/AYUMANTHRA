@@ -32,7 +32,11 @@ const doctorSchema = new Schema({
     type: Boolean,
     default: true,
   },
-  
+  mode: {
+    type: String,
+    enum: ["Physical", "Digital"],
+    default: "Physical", // default to Physical if not specified
+  },
 });
 
 module.exports = mongoose.model('Doctor', doctorSchema);

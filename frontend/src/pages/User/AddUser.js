@@ -1,7 +1,5 @@
-// AddUser.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import './AddUser.css';
 
 const AddUser = ({ onClose, onUserAdded }) => {
   const [inputs, setInputs] = useState({
@@ -16,10 +14,9 @@ const AddUser = ({ onClose, onUserAdded }) => {
   const [loading, setLoading] = useState(false);
   const [phoneError, setPhoneError] = useState('');
 
-  // Validate phone number: must start with 0 and have 10 digits
   const validatePhone = (phone) => {
     if (!phone.startsWith('0')) return false;
-    const phoneRegex = /^0[0-9]{9}$/; // 0 + 9 digits = 10 digits total
+    const phoneRegex = /^0[0-9]{9}$/;
     return phoneRegex.test(phone);
   };
 
@@ -49,7 +46,6 @@ const AddUser = ({ onClose, onUserAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prevent submit if phone is invalid
     if (phoneError) {
       alert('Please fix phone number errors before submitting.');
       return;
@@ -80,7 +76,7 @@ const AddUser = ({ onClose, onUserAdded }) => {
     } catch (err) {
       console.error('Add user error:', err);
       if (err.response && err.response.status === 400) {
-        alert(err.response.data.message); // duplicate error from backend
+        alert(err.response.data.message);
       } else {
         alert('Failed to add user.');
       }
@@ -90,85 +86,96 @@ const AddUser = ({ onClose, onUserAdded }) => {
   };
 
   return (
-    <div className="popup-overlay">
-      <div className="popup">
-        <h3>Add User</h3>
-        <form onSubmit={handleSubmit}>
-          <label>Name:</label>
-          <input
-            type="text"
-            name="userName"
-            value={inputs.userName}
-            onChange={handleChange}
-            required
-          />
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative">
+        <h3 className="text-xl font-bold mb-4 text-gray-800">Add User</h3>
+        <form onSubmit={handleSubmit} className="space-y-4 text-gray-700">
+          <div>
+            <label className="block mb-1 font-medium">Name:</label>
+            <input
+              type="text"
+              name="userName"
+              value={inputs.userName}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-          <label>Phone:</label>
-          <input
-            type="text"
-            name="userPhone"
-            value={inputs.userPhone}
-            onChange={handleChange}
-            required
-          />
-          {phoneError && <span className="error">{phoneError}</span>}
+          <div>
+            <label className="block mb-1 font-medium">Phone:</label>
+            <input
+              type="text"
+              name="userPhone"
+              value={inputs.userPhone}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
+          </div>
 
-          <label>Email:</label>
-          <input
-            type="email"
-            name="userGmail"
-            value={inputs.userGmail}
-            onChange={handleChange}
-            required
-          />
+          <div>
+            <label className="block mb-1 font-medium">Email:</label>
+            <input
+              type="email"
+              name="userGmail"
+              value={inputs.userGmail}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-          <label>Password:</label>
-          <input
-            type="password"
-            name="userPassword"
-            value={inputs.userPassword}
-            onChange={handleChange}
-            required
-          />
+          <div>
+            <label className="block mb-1 font-medium">Password:</label>
+            <input
+              type="password"
+              name="userPassword"
+              value={inputs.userPassword}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-          <label>
-            Agree to Terms:
+          <div className="flex items-center space-x-2">
+            <label className="font-medium">Agree to Terms:</label>
             <input
               type="checkbox"
               name="UserAgree"
               checked={inputs.UserAgree}
               onChange={handleCheckbox}
-              style={{ marginLeft: '5px' }}
+              className="w-5 h-5"
             />
-          </label>
+          </div>
 
-          <label>
-            Status:
+          <div>
+            <label className="block mb-1 font-medium">Status:</label>
             <select
               name="isActive"
               value={inputs.isActive}
               onChange={handleChange}
-              style={{ marginLeft: '5px' }}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option value={true}>Active</option>
               <option value={false}>Inactive</option>
             </select>
-          </label>
+          </div>
 
-          <div style={{ marginTop: '15px' }}>
+          <div className="flex justify-end space-x-3 mt-4">
             <button
               type="submit"
-              className="updatebtn"
               disabled={loading || phoneError}
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
             >
               {loading ? 'Saving...' : 'Register User'}
             </button>
             <button
               type="button"
               onClick={onClose}
-              style={{ marginLeft: '10px' }}
-              className="deletebtn"
               disabled={loading}
+              className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500 transition"
             >
               Cancel
             </button>

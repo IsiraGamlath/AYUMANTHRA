@@ -13,7 +13,7 @@ const getAllManagers = async (req, res) => {
 
 // Add new inventory manager
 const addManager = async (req, res) => {
-  const { firstName, lastName, nic, managerEmail, managerPhone, managerPassword, category } = req.body;
+  const { firstName, lastName, nic, managerEmail, managerPhone, managerPassword } = req.body;
   try {
     const manager = new InventoryManager({
       firstName,
@@ -22,7 +22,6 @@ const addManager = async (req, res) => {
       managerEmail,
       managerPhone,
       managerPassword,
-      category, // ✅ include category
     });
     await manager.save();
     const managerData = manager.toObject();
@@ -52,14 +51,14 @@ const getManagerById = async (req, res) => {
 // Update inventory manager
 const updateManager = async (req, res) => {
   const id = req.params.id?.trim();
-  const { firstName, lastName, nic, managerEmail, managerPhone, managerPassword, category } = req.body;
+  const { firstName, lastName, nic, managerEmail, managerPhone, managerPassword } = req.body;
 
   if (!id || id.length !== 24) return res.status(400).json({ message: 'Invalid manager ID.' });
 
   try {
     const manager = await InventoryManager.findByIdAndUpdate(
       id,
-      { firstName, lastName, nic, managerEmail, managerPhone, managerPassword, category },
+      { firstName, lastName, nic, managerEmail, managerPhone, managerPassword },
       { new: true }
     ).select('-managerPassword');
 

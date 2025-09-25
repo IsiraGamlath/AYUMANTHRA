@@ -1,6 +1,5 @@
 // User.js
 import React from 'react';
-import './User.css';
 
 const User = ({ user, onUpdate }) => {
   const { userName, userPhone, userGmail, UserAgree, isActive } = user;
