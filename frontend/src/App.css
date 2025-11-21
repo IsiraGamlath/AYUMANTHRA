@@ -1,0 +1,105 @@
+/* App.css */
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Main app container */
+.app-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Content area */
+.content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  transition: margin-left 0.3s ease;
+  margin-left: 0;
+  background-color: #f8f9fa;
+}
+
+/* Desktop: content shifts when sidebar is open */
+@media (min-width: 769px) {
+  .content.sidebar-open {
+    margin-left: 280px; /* Adjust based on your sidebar width */
+  }
+}
+
+/* Mobile: content takes full width, sidebar overlays */
+@media (max-width: 768px) {
+  .content {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+/* Header and hamburger menu styles */
+.content-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: white;
+  padding: 15px 20px;
+  margin: -20px -20px 20px -20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.hamburger-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.hamburger-btn:active {
+  background-color: #e0e0e0;
+}
+
+/* Hide hamburger on desktop when sidebar is always visible */
+@media (min-width: 769px) {
+  .content.sidebar-open .hamburger-btn {
+    display: none;
+  }
+}
+
+.content-body {
+  flex: 1;
+  padding: 0;
+}
+
+/* Additional responsive adjustments */
+@media (max-width: 480px) {
+  .content {
+    padding: 10px;
+  }
+  
+  .content-header {
+    padding: 10px 15px;
+    margin: -10px -10px 15px -10px;
+  }
+}
