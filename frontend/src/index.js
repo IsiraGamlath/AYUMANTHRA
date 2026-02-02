@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
-// import reportWebVitals from './reportWebVitals'; // only if you have this file
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import App from './App';
+import { BrowserRouter } from "react-router-dom";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-    <App />
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
   </BrowserRouter>
 );
-
-// reportWebVitals(); // remove or uncomment if imported

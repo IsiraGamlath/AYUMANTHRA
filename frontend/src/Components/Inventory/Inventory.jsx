@@ -1,5 +1,5 @@
-// Inventory.jsx - Table Layout with Left Sidebar Navigation
-import React, { useState, useEffect } from 'react';
+// Inventory.js - Table Layout with Expandable Details
+import React, { useState } from 'react';
 import { Search, Package } from 'lucide-react';
 import axios from 'axios';
 import IMNav from "../../Components/Nav/IMNav/IMNav";
@@ -15,8 +15,6 @@ const InventoryDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState(['All']);
   const [expandedRows, setExpandedRows] = useState([]);
-
-  useEffect(() => { fetchInventory(); }, []);
 
   const fetchInventory = async () => {
     try {
@@ -86,61 +84,29 @@ const InventoryDashboard = () => {
 
   if (loading) {
     return (
-      <div className="inventory-container">
-        <aside className="sidebar-nav">
-          <IMNav />
-        </aside>
-        <div className="main-content">
-          <header className="inventory-header">
-            <h1 className="page-title">Inventory Management</h1>
-            <button className="refresh-btn" onClick={fetchInventory}>🔄 Refresh</button>
-          </header>
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-          </div>
+      <div className="inventory-page">
+        <header className="inventory-header">
+          <h1 className="page-title">Inventory Management</h1>
+          <button className="refresh-btn" onClick={fetchInventory}>🔄 Refresh</button>
+        </header>
+        <div className="loading-container">
+          <div className="loading-spinner">Loading inventory...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="inventory-container">
-      <aside className="sidebar-nav">
-        <IMNav />
-      </aside>
+    <div className="inventory-page">
+      <IMNav />
 
-      <div className="main-content">
-        <style>
-          {
-            `/* Inventory.css - Sidebar Layout Theme */
+      <style>
+      {
+        `/* Inventory.css - Table Layout Theme */
 
 body {
   font-family: 'system-ui', sans-serif;
   background: #f0f8ff;
-  margin: 0;
-}
-
-.inventory-container {
-  display: flex;
-  min-height: 100vh;
-}
-
-.sidebar-nav {
-  width: 260px;
-  background: white;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
-  overflow-y: auto;
-  position: fixed;
-  height: 100vh;
-  left: 0;
-  top: 0;
-}
-
-.main-content {
-  margin-left: 260px;
-  flex: 1;
-  padding: 20px;
-  max-width: calc(100% - 260px);
 }
 
 .inventory-page {
@@ -171,12 +137,6 @@ body {
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
-  border: none;
-  transition: background 0.3s ease;
-}
-
-.refresh-btn:hover {
-  background: #45a049;
 }
 
 .search-filters-container {
@@ -208,7 +168,6 @@ body {
   padding: 8px 10px 8px 28px;
   border-radius: 6px;
   border: 1px solid #c8e6c9;
-  box-sizing: border-box;
 }
 
 .search-container svg {
@@ -225,17 +184,12 @@ body {
   border-radius: 6px;
   border: 1px solid #c8e6c9;
   cursor: pointer;
-  box-sizing: border-box;
 }
 
 /* Table Styles */
 .inventory-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 .inventory-table th, .inventory-table td {
@@ -308,119 +262,96 @@ body {
   color: #546e7a;
 }
 
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-}
+        `
+      }
+    </style>
+      <header className="inventory-header">
+        <h1 className="page-title">Inventory Management</h1>
+        <button className="refresh-btn" onClick={fetchInventory}>🔄 Refresh</button>
+      </header>
 
-.loading-spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4caf50;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-            `
-          }
-        </style>
-
-        <header className="inventory-header">
-          <h1 className="page-title">Inventory Management</h1>
-          <button className="refresh-btn" onClick={fetchInventory}>🔄 Refresh</button>
-        </header>
-
-        <div className="search-filters-container">
-          <div className="filters-grid">
-            <div className="filter-group">
-              <label>Search Medicine</label>
-              <div className="search-container">
-                <Search size={18} />
-                <input
-                  type="text"
-                  placeholder="Search by name..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
+      <div className="search-filters-container">
+        <div className="filters-grid">
+          <div className="filter-group">
+            <label>Search Medicine</label>
+            <div className="search-container">
+              <Search size={18} />
+              <input
+                type="text"
+                placeholder="Search by name..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
-            <div className="filter-group">
-              <label>Category</label>
-              <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
-                {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-              </select>
-            </div>
-            <div className="filter-group">
-              <label>Stock Level</label>
-              <select value={stockFilter} onChange={(e) => setStockFilter(e.target.value)}>
-                <option>All</option>
-                <option>Good Stock</option>
-                <option>Medium Stock</option>
-                <option>Low Stock</option>
-                <option>Critical</option>
-              </select>
-            </div>
-            <div className="filter-group">
-              <label>Expiry Status</label>
-              <select value={expiryFilter} onChange={(e) => setExpiryFilter(e.target.value)}>
-                <option>All</option>
-                <option>Expires Soon</option>
-                <option>Fresh</option>
-                <option>Near Expiry</option>
-              </select>
-            </div>
+          </div>
+          <div className="filter-group">
+            <label>Category</label>
+            <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
+              {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+            </select>
+          </div>
+          <div className="filter-group">
+            <label>Stock Level</label>
+            <select value={stockFilter} onChange={(e) => setStockFilter(e.target.value)}>
+              <option>All</option>
+              <option>Good Stock</option>
+              <option>Medium Stock</option>
+              <option>Low Stock</option>
+              <option>Critical</option>
+            </select>
+          </div>
+          <div className="filter-group">
+            <label>Expiry Status</label>
+            <select value={expiryFilter} onChange={(e) => setExpiryFilter(e.target.value)}>
+              <option>All</option>
+              <option>Expires Soon</option>
+              <option>Fresh</option>
+              <option>Near Expiry</option>
+            </select>
           </div>
         </div>
+      </div>
 
-        {filteredMedicines.length > 0 ? (
-          <table className="inventory-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Stock Level</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredMedicines.map(med => (
-                <React.Fragment key={med.id}>
-                  <tr className="main-row" onClick={() => toggleRow(med.id)}>
-                    <td>{med.name}</td>
-                    <td>
-                      <span className={`status-dot status-${med.status}`}></span>
-                      {med.quantity} / {med.maxQuantity}
+      {filteredMedicines.length > 0 ? (
+        <table className="inventory-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Stock Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredMedicines.map(med => (
+              <React.Fragment key={med.id}>
+                <tr className="main-row" onClick={() => toggleRow(med.id)}>
+                  <td>{med.name}</td>
+                  <td>
+                    <span className={`status-dot status-${med.status}`}></span>
+                    {med.quantity} / {med.maxQuantity}
+                  </td>
+                </tr>
+                {expandedRows.includes(med.id) && (
+                  <tr className="expanded-row">
+                    <td colSpan={2}>
+                      <div className="expanded-content">
+                        <img src={med.image} alt={med.name} />
+                        <p><strong>Expiry Date:</strong> {med.expiryDate}</p>
+                        <p><strong>Supplier:</strong> {med.supplier}</p>
+                      </div>
                     </td>
                   </tr>
-                  {expandedRows.includes(med.id) && (
-                    <tr className="expanded-row">
-                      <td colSpan={2}>
-                        <div className="expanded-content">
-                          <img src={med.image} alt={med.name} />
-                          <p><strong>Expiry Date:</strong> {med.expiryDate}</p>
-                          <p><strong>Supplier:</strong> {med.supplier}</p>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div className="empty-state">
-            <Package size={80} />
-            <h3>No medicines found</h3>
-            <p>Adjust your filters or search to view medicines.</p>
-          </div>
-        )}
-      </div>
+                )}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className="empty-state">
+          <Package size={80} />
+          <h3>No medicines found</h3>
+          <p>Adjust your filters or search to view medicines.</p>
+        </div>
+      )}
     </div>
   );
 };

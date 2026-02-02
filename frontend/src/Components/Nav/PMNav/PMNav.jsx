@@ -1,0 +1,407 @@
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { BiHome, BiLogOut } from "react-icons/bi";
+import { FaUserTie } from "react-icons/fa";
+import profilePic from "../images/logo.png"; // replace with actual path
+import { useAuth } from '../../../contexts/AuthContext';
+
+const IMNav = () => {
+  const navigate = useNavigate();
+  const managerId = localStorage.getItem("managerId");
+  const managerName = localStorage.getItem("managerName");
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+     logout(); 
+    alert("You have been logged out.");
+    navigate("/LoginH")
+  };
+
+  return (
+    <div className="w-64 min-h-screen bg-green-600 text-white flex flex-col">
+      <style>
+        {
+          `/* IMNav.css */
+
+.im-sidebar {
+  width: 250px;
+  height: 100vh;
+  background: linear-gradient(180deg, #215235 0%, #4ff57e 100%);
+  color: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+/* Logo Section */
+.im-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  margin: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #ecf0f1;
+}
+
+/* Profile Section */
+.im-profile-section {
+  padding: 2rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.im-profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid #f39c12;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.im-profile-pic:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+}
+
+.im-profile-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ecf0f1;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* Navigation Links */
+.im-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  padding-top: 1rem;
+}
+
+.im-nav-links li {
+  margin-bottom: 0.5rem;
+}
+
+.im-nav-link {
+  display: flex;
+  align-items: center;
+  color: #d5f4e6;
+  text-decoration: none;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.im-nav-link:hover {
+  background: rgba(243, 156, 18, 0.2);
+  color: #ecf0f1;
+  border-left-color: #f39c12;
+  transform: translateX(5px);
+}
+
+.im-nav-link.active {
+  background: rgba(243, 156, 18, 0.3);
+  color: #ecf0f1;
+  border-left-color: #f39c12;
+}
+
+.im-nav-link .icon {
+  margin-right: 1rem;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.im-nav-link:hover .icon {
+  transform: scale(1.1);
+}
+
+/* Logout Button */
+.im-logout-btn {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: #e74c3c;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.im-logout-btn:hover {
+  background: rgba(231, 76, 60, 0.2);
+  color: #fff;
+  border-left-color: #e74c3c;
+  transform: translateX(5px);
+}
+
+.im-logout-btn .icon {
+  margin-right: 1rem;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.im-logout-btn:hover .icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .im-sidebar {
+    width: 230px;
+  }
+  
+  .im-logo {
+    font-size: 1.4rem;
+    padding: 1.2rem 0.8rem;
+  }
+  
+  .im-profile-section {
+    padding: 1.5rem 0.8rem;
+  }
+  
+  .im-profile-pic {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .im-nav-link,
+  .im-logout-btn {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .im-sidebar {
+    width: 200px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .im-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  
+  .im-logo {
+    font-size: 1.2rem;
+    padding: 1rem;
+  }
+  
+  .im-profile-section {
+    padding: 1rem;
+  }
+  
+  .im-profile-pic {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .im-profile-name {
+    font-size: 1rem;
+  }
+  
+  .im-nav-link,
+  .im-logout-btn {
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .im-nav-link .icon,
+  .im-logout-btn .icon {
+    font-size: 1.1rem;
+    margin-right: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .im-sidebar {
+    width: 100%;
+    height: 100vh;
+    z-index: 9999;
+  }
+  
+  .im-logo {
+    font-size: 1.1rem;
+  }
+  
+  .im-profile-pic {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .im-nav-link,
+  .im-logout-btn {
+    padding: 0.6rem 0.8rem;
+  }
+}
+
+/* Scrollbar Styling */
+.im-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.im-sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.im-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.im-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Active link indicator */
+.im-nav-link::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #f39c12;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.im-nav-link:hover::after,
+.im-nav-link.active::after {
+  opacity: 1;
+}
+
+/* Smooth animations */
+.im-sidebar * {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus states for accessibility */
+.im-nav-link:focus,
+.im-logout-btn:focus {
+  outline: 2px solid #f39c12;
+  outline-offset: -2px;
+}
+
+/* Logo hover effect */
+.im-logo:hover {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  transform: scale(1.02);
+}
+
+/* Inventory-specific enhancements */
+.im-sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #464854, #624b9b, #211c81);
+  z-index: 1;
+}
+
+/* Additional hover effects for inventory theme */
+.im-nav-link:hover {
+  box-shadow: inset 0 0 0 1px rgba(243, 156, 18, 0.3);
+}
+
+.im-profile-section::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 2px;
+  background: #1c1c1b;
+}
+
+.im-profile-section {
+  position: relative;
+}
+
+/* Manager role indicator */
+.im-profile-name::after {
+  content: '• Manager';
+  display: block;
+  font-size: 0.8rem;
+  color: #110d08;
+  font-weight: 400;
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+          `
+        }
+      </style>
+      {/* Logo */}
+      <div className="text-center py-6 border-b border-green-500">
+        <h2 className="text-2xl font-bold tracking-wide">Ayu Mantra</h2>
+      </div>
+
+      {/* Profile Section */}
+      <div className="flex flex-col items-center py-6 border-b border-green-500">
+        <img
+          src={profilePic}
+          alt="Profile"
+          className="w-20 h-20 rounded-full border-2 border-white mb-2"
+        />
+        <p className="text-lg font-semibold">{managerName || "Manager"}</p>
+      </div>
+
+      {/* Navigation Links */}
+      <ul className="flex-1 px-4 py-6 space-y-3">
+        <li>
+          <Link
+            to="/management"
+            className="flex items-center gap-3 px-3 py-2 rounded hover:bg-green-500 transition"
+          >
+            <BiHome className="text-xl" />
+            Dashboard
+          </Link>
+        </li>
+
+        {managerId && (
+          <li>
+            <Link
+              to={`/imProfile/${managerId}`}
+              className="flex items-center gap-3 px-3 py-2 rounded hover:bg-green-500 transition"
+            >
+              <FaUserTie className="text-xl" />
+              Profile
+            </Link>
+          </li>
+        )}
+
+      </ul>
+    </div>
+  );
+};
+
+export default IMNav;

@@ -1,0 +1,1041 @@
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+
+
+const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
+  return (
+    <>
+    <style>
+      {
+        `
+        /* Body and container styling for Ayurvedic platform */
+body {
+  background: #f5f5f5;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* Header styling */
+.admin-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 30px 0;
+  background: #ffffff;
+  border-radius: 16px;
+  color: #333333;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header p {
+  margin: 10px 0 0;
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* Message styling */
+.message {
+  margin: 20px 0;
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.success-message {
+  background: #e8f5e8;
+  color: #2e7d32;
+  border: 1px solid #4caf50;
+}
+
+.error-message {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #f44336;
+}
+
+/* Appointments chart styling */
+.appointments-chart {
+  margin: 30px 0;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.chart-title {
+  text-align: center;
+  color: #2e7d32;
+  margin-bottom: 25px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.chart-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.1);
+  border: 1px solid #c8e6c9;
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.2);
+}
+
+.stat-card h4 {
+  margin: 0 0 10px;
+  font-size: 32px;
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+.stat-card p {
+  margin: 0;
+  color: #558b2f;
+  font-weight: 500;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #689f38;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* Appointments list */
+.appointments-list {
+  margin-top: 30px;
+}
+
+.appointments-list h4 {
+  color: #33691e;
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.appointments-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0;
+}
+
+.appointment-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 5px solid #4caf50;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.1);
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  gap: 20px;
+  align-items: center;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.appointment-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.2);
+}
+
+.appointment-time {
+  font-weight: 700;
+  color: #2e7d32;
+  font-size: 16px;
+}
+
+.appointment-patient {
+  font-weight: 600;
+  color: #33691e;
+}
+
+.mode-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  justify-self: center;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.mode-badge.digital {
+  background: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #2196f3;
+}
+
+.mode-badge.physical {
+  background: #fff3e0;
+  color: #f57c00;
+  border: 1px solid #ff9800;
+}
+
+.consultation-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-self: end;
+  align-items: flex-end;
+}
+
+.consultation-status,
+.pdf-status {
+  font-size: 12px;
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.manage-consultation-btn {
+  background: #ffeb3b;
+  color: #5d4037;
+  border: 1px solid #ffc107;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: fit-content;
+  max-width: 120px;
+}
+
+.manage-consultation-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(156, 39, 176, 0.4);
+  background: #9c27b0;
+  color: white;
+  border-color: #9c27b0;
+}
+
+.physical-appointment-note {
+  font-size: 12px;
+  color: #757575;
+  font-style: italic;
+}
+
+/* Form styling */
+.form-section {
+  margin: 40px 0;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+}
+
+.form-title {
+  color: #2e7d32;
+  margin-bottom: 25px;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  margin-bottom: 8px;
+  color: #33691e;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.form-select,
+.form-input {
+  padding: 12px 16px;
+  border: 2px solid #c8e6c9;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-select:focus,
+.form-input:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+/* Button styling with different colors */
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary {
+  background: #4caf50;
+  color: white;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+  background: #4caf50;
+}
+
+.btn-secondary {
+  background: #9e9e9e;
+  color: white;
+  box-shadow: 0 4px 12px rgba(158, 158, 158, 0.3);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(158, 158, 158, 0.4);
+  background: #9e9e9e;
+}
+
+.btn-success {
+  background: #8bc34a;
+  color: white;
+  box-shadow: 0 4px 12px rgba(139, 195, 74, 0.3);
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139, 195, 74, 0.4);
+  background: #8bc34a;
+}
+
+.btn-danger {
+  background: #f44336;
+  color: white;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(244, 67, 54, 0.4);
+  background: #f44336;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Availability section */
+.availability-section {
+  margin-top: 30px;
+  padding: 25px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #c8e6c9;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.1);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.section-header h4 {
+  color: #2e7d32;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.bulk-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.bulk-mode-info {
+  background: #f5f5f5;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border-left: 4px solid #cccccc;
+}
+
+.bulk-mode-info p {
+  margin: 0 0 10px;
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+/* Time slots styling */
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.time-slot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background: white;
+  border: 2px solid #c8e6c9;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  cursor: default;
+  position: relative;
+}
+
+.time-slot:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.2);
+}
+
+.time-slot.booked {
+  background: #ffebee;
+  border-color: #ffcdd2;
+  opacity: 0.7;
+}
+
+.time-slot.selected {
+  background: #2e7d32;
+  border-color: #1b5e20;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.3);
+  color: white;
+}
+
+.time-slot.selectable {
+  cursor: pointer;
+}
+
+.time-slot.selectable:hover {
+  border-color: #4caf50;
+}
+
+.status-badge {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.booked-badge {
+  background: #ffcdd2;
+  color: #c62828;
+}
+
+.past-badge {
+  background: #e0e0e0;
+  color: #424242;
+}
+
+.slot-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.remove-btn {
+  background: #f44336;
+  color: white;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.remove-btn:hover {
+  background: #d32f2f;
+  transform: scale(1.1);
+}
+
+.bulk-checkbox {
+  background: #4caf50;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.no-availability {
+  text-align: center;
+  padding: 40px;
+  color: #666666;
+  font-style: italic;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px dashed #cccccc;
+}
+
+.no-appointments {
+  text-align: center;
+  padding: 30px;
+  color: #689f38;
+  font-style: italic;
+}
+
+/* Add time form - Updated to be horizontal and left-aligned */
+.add-time-form {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+  margin-top: 25px;
+  padding-top: 25px;
+  border-top: 2px solid #e8f5e8;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+}
+
+.add-time-form .form-group {
+  flex: 0 0 auto;
+  min-width: 160px;
+  width: 160px;
+  margin-bottom: 0;
+}
+
+.add-time-form .form-group:first-child {
+  margin-left: 0;
+}
+
+.time-input {
+  min-width: 160px;
+  width: 160px;
+}
+
+.add-time-form .btn {
+  margin-bottom: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+  height: 48px;
+  align-self: flex-end;
+}
+
+/* Modal styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(46, 125, 50, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(46, 125, 50, 0.3);
+}
+
+.consultation-modal h3 {
+  color: #2e7d32;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.consultation-modal p {
+  margin: 10px 0;
+  color: #33691e;
+}
+
+.consultation-form {
+  margin: 25px 0;
+}
+
+.consultation-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #c8e6c9;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.consultation-input:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.update-link-btn {
+  background: #8bc34a;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.update-link-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139, 195, 74, 0.3);
+}
+
+.update-link-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.cancel-btn {
+  background: #9e9e9e;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(158, 158, 158, 0.3);
+}
+
+.current-pdf,
+.info-section {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 15px 0;
+  border-left: 4px solid #cccccc;
+}
+
+.refresh-btn {
+  margin-top: 20px;
+  background: #ff9800;
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+
+.refresh-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 152, 0, 0.4);
+}
+
+/* Mobile menu button */
+.mobile-menu-btn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1001;
+  background: #81c784;
+  border: none;
+  border-radius: 4px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn:hover {
+  background: #66bb6a;
+  transform: scale(1.05);
+}
+
+.mobile-menu-btn.active {
+  background: #66bb6a;
+}
+
+.hamburger-line {
+  width: 24px;
+  height: 2px;
+  background: white;
+  margin: 2px 0;
+  transition: 0.3s;
+  border-radius: 2px;
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(135deg, #a5d6a7 0%, #81c784 100%);
+  box-shadow: 3px 0 15px rgba(0, 0, 0, 0.2);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.sidebar.active {
+  transform: translateX(0);
+}
+
+.sidebar-container {
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Brand */
+.sidebar-brand {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.brand-link {
+  text-decoration: none;
+  color: white;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  font-size: 24px;
+}
+
+.brand-text {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Navigation sections */
+.nav-section {
+  margin-bottom: 25px;
+}
+
+.nav-section-title {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  padding-left: 12px;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(4px);
+}
+
+.nav-link.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-weight: 600;
+}
+
+.nav-icon {
+  font-size: 16px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.nav-text {
+  flex: 1;
+}
+
+/* Overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Responsive design */
+@media (min-width: 768px) {
+  .mobile-menu-btn {
+    display: none;
+  }
+   
+  .sidebar {
+    transform: translateX(0);
+    width: 260px;
+  }
+   
+  .sidebar-overlay {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .sidebar {
+    width: 260px;
+  }
+}
+        `
+      }
+    </style>
+      {/* Mobile Menu Button */}
+      <button 
+        className={`mobile-menu-btn ${isMenuOpen ? 'active' : ''}`}
+        onClick={toggleMenu}
+        aria-label="Toggle navigation menu"
+      >
+        <span className="hamburger-line"></span>
+        <span className="hamburger-line"></span>
+        <span className="hamburger-line"></span>
+      </button>
+
+      {/* Sidebar */}
+      <nav className={`sidebar ${isMenuOpen ? 'active' : ''}`}>
+        <div className="sidebar-container">
+          {/* Logo/Brand */}
+          <div className="sidebar-brand">
+            <Link to="/" className="brand-link" onClick={closeMenu}>
+              <div className="brand-logo">
+                <span className="brand-icon">🏥</span>
+                <span className="brand-text">AYUMANTHRA</span>
+              </div>
+            </Link>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="sidebar-nav">
+            {/* Patient Section */}
+            <div className="nav-section">
+              <span className="nav-section-title">Patient Portal</span>
+              <div className="nav-links">
+                <Link 
+                  to="/appointments" 
+                  className={`nav-link ${isActive('/') ? 'active' : ''}`}
+                  onClick={closeMenu}
+                >
+                  <span className="nav-icon">📅</span>
+                  <span className="nav-text">Check Availability</span>
+                </Link>
+                <Link 
+                  to="/book" 
+                  className={`nav-link ${isActive('/book') ? 'active' : ''}`}
+                  onClick={closeMenu}
+                >
+                  <span className="nav-icon">📝</span>
+                  <span className="nav-text">Book Appointment</span>
+                </Link>
+                <Link 
+                  to="/myappointments" 
+                  className={`nav-link ${isActive('/myappointments') ? 'active' : ''}`}
+                  onClick={closeMenu}
+                >
+                  <span className="nav-icon">📋</span>
+                  <span className="nav-text">My Appointments</span>
+                </Link>
+                <Link 
+                  to="/my-notifications" 
+                  className={`nav-link ${isActive('/my-notifications') ? 'active' : ''}`}
+                  onClick={closeMenu}
+                >
+                  <span className="nav-icon">🔔</span>
+                  <span className="nav-text">Notifications</span>
+                </Link>
+                <Link 
+                  to="/payment" 
+                  className={`nav-link ${isActive('/payment') ? 'active' : ''}`}
+                  onClick={closeMenu}
+                >
+                  <span className="nav-icon">💳</span>
+                  <span className="nav-text">Payment</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Doctor Section */}
+            <div className="nav-section">
+              <span className="nav-section-title">Doctor Portal</span>
+              <div className="nav-links">
+                <Link 
+                  to="/doctor-appointments" 
+                  className={`nav-link ${isActive('/doctor-appointments') ? 'active' : ''}`}
+                  onClick={closeMenu}
+                >
+                  <span className="nav-icon">🩺</span>
+                  <span className="nav-text">Doctor Dashboard</span>
+                </Link>
+                <Link 
+                  to="/doctor-notifications" 
+                  className={`nav-link ${isActive('/doctor-notifications') ? 'active' : ''}`}
+                  onClick={closeMenu}
+                >
+                  <span className="nav-icon">🔔</span>
+                  <span className="nav-text">Doctor Notifications</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Admin Section */}
+            <div className="nav-section">
+              <span className="nav-section-title">Admin Portal</span>
+              <div className="nav-links">
+                <Link 
+                  to="/admin" 
+                  className={`nav-link ${isActive('/admin') ? 'active' : ''}`}
+                  onClick={closeMenu}
+                >
+                  <span className="nav-icon">⚙️</span>
+                  <span className="nav-text">Admin Dashboard</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Overlay for mobile menu */}
+      <div 
+        className={`sidebar-overlay ${isMenuOpen ? 'active' : ''}`}
+        onClick={closeMenu}
+      ></div>
+    </>
+  );
+};
+
+export default Navbar;
